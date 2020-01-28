@@ -1,0 +1,14 @@
+<header>
+    <nav class ="navbar navbar-expand-md navbar-dark bg-dark">
+    <div><a href="#" class="navbar-brand">BibleRead</a></div>
+    
+    <ul class="navbar-nav">
+       
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="/viewBibleInfo" class="nav-link">View Bible info</a></li>
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="/customize" class="nav-link">Customize</a></li>
+      <li><a *ngIf="!loginService.isUserLoggedIn()" routerLink="/login" class="nav-link">Login</a></li>
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="/logout" class="nav-link">LogOut</a></li>
+    
+    </ul>
+      </nav>
+    </header>

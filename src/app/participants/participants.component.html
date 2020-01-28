@@ -1,0 +1,13 @@
+<div class="card m-3">
+    <h5 class="card-header">List of Participants</h5>
+    <div class="card-body">
+        <div class="form-row" *ngFor="let partcipant of partcipiants" >
+            <div class="form-group col-2">
+                <label>{{partcipant.name}}</label>
+            </div>
+            <div class="form-group col-2">
+            <img style="width: 150px" src={{partcipant.file}} alt="" id="img">
+        </div>
+        </div>
+    </div>
+</div>
