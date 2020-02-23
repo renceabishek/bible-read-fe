@@ -9,9 +9,18 @@ import { DailyData } from './model/DailyData';
   providedIn: 'root'
 })
 export class ChartServiceService {
+
+   httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json'
+    })
+  };
+
   
 
   constructor(private http: HttpClient) { }
+
+  
 
   public getTotalCounts(): Observable<TotalCounts[]> {
     console.log("in service");
@@ -22,6 +31,14 @@ export class ChartServiceService {
 
   public viewBibleInfo(): Observable<DailyData[]> {
     return this.http.get<DailyData[]>('/bible/all');
+  }
+
+  public postBibleInfo(dailyData): Observable<any> {
+   return this.http.post('/bible/all', dailyData,  { responseType: 'text'});
+  }
+
+  public deleteBibleInfo(uniqueId): Observable<any> {
+    return this.http.delete<any>('/bible/date/'+uniqueId);
   }
 }
 

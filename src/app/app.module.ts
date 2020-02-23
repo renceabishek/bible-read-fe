@@ -5,9 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AgGridModule } from 'ag-grid-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule  } from  '@angular/material';
+import { MatMenuModule} from '@angular/material/menu';
 import { TotalcountComponent } from './totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
@@ -16,6 +16,12 @@ import { PostComponent } from './post/post.component';
 import { BibleInfoComponent } from './bible-info/bible-info.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import { CustomizeComponent } from './customize/customize.component';
+import { MembersComponent } from './members/members.component';
+import { BiblereadersComponent } from './biblereaders/biblereaders.component';
+import { CarouselComponent } from './carousel/carousel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
+import { AgGridModule } from 'ag-grid-angular';
+import { DatatableComponent } from './bible-info/datatable/datatable.component';
 
 @NgModule({
   declarations: [
@@ -27,14 +33,19 @@ import { CustomizeComponent } from './customize/customize.component';
     PostComponent,
     BibleInfoComponent,
     ParticipantsComponent,
-    CustomizeComponent
+    CustomizeComponent,
+    MembersComponent,
+    BiblereadersComponent,
+    CarouselComponent,
+    DatatableComponent
   ],
   imports: [
     BrowserModule,
-    AgGridModule.withComponents([]),
     ReactiveFormsModule,
     FormsModule,
+    AgGridModule.withComponents([]),
     AppRoutingModule,
+    NgbModule,
     BrowserAnimationsModule,
     HttpClientModule,
     MatToolbarModule,
@@ -43,7 +54,11 @@ import { CustomizeComponent } from './customize/customize.component';
     MatButtonModule,
     MatIconModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

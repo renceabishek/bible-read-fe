@@ -1,19 +1,26 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-      
-      <h1>Daily Bible Reading App</h1>
-      <span class="menu-spacer"></span>
-      <div>
-        <a mat-button [routerLink]="'/participants'"> Participants </a>
-        <a mat-button [routerLink]="'/totalCounts'"> Total Counts </a>
-        <a mat-button [routerLink]="'/weekly'"> Weekly </a>
-        <a mat-button [routerLink]="'/monthly'"> Monthly </a> 
-        <a mat-button [routerLink]="'/top'"> Top 3 </a>
-        <a mat-button [routerLink]="'/percentage'"> Percentage </a>
-        <a mat-button [routerLink]="'/post'"> Admin </a>
-  
-      </div>
-    </mat-toolbar-row>
-  
-  </mat-toolbar>
-  <router-outlet></router-outlet>
+<mat-toolbar class="navbar_fixed">
+  <mat-toolbar-row>
+    <div class='col-3'>
+      <button mat-button [routerLink]="'/'">
+        <!-- <mat-icon svgIcon="church" class="church-icon"></mat-icon> -->
+       <span style="font-family: cursive; font-size: 19px;"> CHRIST CHURCH YOUTH</span>
+      </button>
+    </div>
+    <div class='col-9'>
+      <button mat-icon-button [matMenuTriggerFor]="menu1" style="float: right">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu1="matMenu">
+        <button mat-menu-item [routerLink]="'/post'">
+          <mat-icon>admin</mat-icon>
+          <span>Admin</span>
+        </button>
+      </mat-menu>
+      <button mat-button [routerLink]="'/members'" style="float: right"> Members </button>
+        <button mat-button [routerLink]="'/biblereaders'" style="float: right"> Bible Readers </button>
+    </div>
+
+  </mat-toolbar-row>
+
+</mat-toolbar>
+<router-outlet></router-outlet>

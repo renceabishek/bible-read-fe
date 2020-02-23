@@ -6,4 +6,5 @@ export class DailyData {
     chapter: string;
     fromVerses: number;
     toVerses: number;
+    id: number;
 }

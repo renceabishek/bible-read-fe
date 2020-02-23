@@ -1,0 +1,31 @@
+.animation_organizer {
+     visibility: visible;
+    animation-delay: 0.4s;
+    animation-name: fadeInUp;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    animation-duration: 1s;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0,100%,0);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}

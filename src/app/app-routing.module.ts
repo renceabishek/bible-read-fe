@@ -9,10 +9,14 @@ import { AuthGuardService } from './service/auth-guard.service';
 import { BibleInfoComponent } from './bible-info/bible-info.component';
 import { CustomizeComponent } from './customize/customize.component';
 import { ParticipantsComponent } from './participants/participants.component';
+import { MembersComponent } from './members/members.component';
+import { BiblereadersComponent } from './biblereaders/biblereaders.component';
 
 
 const routes: Routes = [
   {path:'totalCounts', component: TotalcountComponent},
+  {path:'members', component: MembersComponent},
+  {path:'biblereaders', component: BiblereadersComponent},
   {path:'participants', component: ParticipantsComponent},
   {path:'viewBibleInfo', component: BibleInfoComponent},
   {path:'customize', component: CustomizeComponent},
