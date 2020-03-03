@@ -1,4 +1,4 @@
-.image_Backgroup  {
+ .image_Backgroup  {
     background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -27,11 +27,11 @@
     margin-top: 24px;
   }
 
-  .carousels_div {
+  /*.carousels_div {
     padding-top: 317px;
   }
 
   .carousel-item {
     padding-left: 252px;
     color: #fff;
-  }
+  } */

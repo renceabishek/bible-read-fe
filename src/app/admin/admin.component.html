@@ -1,0 +1,47 @@
+<br><br>
+<header style="margin-top:8px">
+  <div fxLayout="row" class="navbar navbar-expand-md navbar-dark bg-dark header-style"
+  fxLayoutAlign="space-around center"
+    >
+    <nav class="navbar-nav" fxShow="true" fxFlex fxHide.lt-sm="true" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.gt-xs="space-evenly center">
+      <li id="ccy-li-instruction" class="nav-item active">
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/instructions" class="nav-link ccy-fblack">Instructions</a>
+      </li>
+      <li id="ccy-li-membersinfo" class="nav-item">
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/membersinfo" class="nav-link ccy-fblack">Youth Members</a>
+      </li>
+      <li id="ccy-li-bibleinfo" class="nav-item">
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/bibleinfo" class="nav-link ccy-fblack">Bible Info</a>
+      </li>
+      <li id="ccy-li-meetings" class="nav-item">
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/meetings" class="nav-link ccy-fblack">Youth Meeting MoM</a>
+      </li>
+      <li id="ccy-li-login" class="nav-item">
+        <a *ngIf="!loginService.isUserLoggedIn()" routerLink="/login" class="nav-link ccy-fblack">Login</a>
+      </li>
+      <li id="ccy-li-logout" class="nav-item">
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/logout" class="nav-link ccy-fblack">LogOut</a>
+      </li>
+
+    </nav>
+    <div fxHide="true" fxFlex fxShow.lt-sm="true" fxLayoutAlign.lt-sm="space-evenly center"
+      *ngIf="loginService.isUserLoggedIn()">
+      <button mat-icon-button routerLink="/instructions" >
+        <mat-icon svgIcon='instruction'></mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/membersinfo">
+        <mat-icon svgIcon='members'></mat-icon>
+      </button>
+      <button mat-icon-button routerLink="{ outlets: { primary: ['bibleinfo'],aux: ['bibleinfo'] } }">
+        <mat-icon svgIcon='bible'></mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/meetings">
+        <mat-icon svgIcon='meeting'></mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/logout">
+          <mat-icon svgIcon='logout'></mat-icon>
+        </button>
+      </div>
+  </div>
+</header>
+<router-outlet name="aux"></router-outlet>  

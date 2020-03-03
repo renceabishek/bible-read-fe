@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { TotalcountComponent } from '../app/totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { PostComponent } from './post/post.component';
+import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AuthGuardService } from './service/auth-guard.service';
@@ -18,9 +18,9 @@ const routes: Routes = [
   {path:'members', component: MembersComponent},
   {path:'biblereaders', component: BiblereadersComponent},
   {path:'participants', component: ParticipantsComponent},
-  {path:'viewBibleInfo', component: BibleInfoComponent},
-  {path:'customize', component: CustomizeComponent},
-  {path:'post', component: PostComponent,canActivate:[AuthGuardService]},
+  {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"aux"},
+  {path:'membersinfo', component: CustomizeComponent, canActivate:[AuthGuardService]},
+  {path:"instructions", component: AdminComponent,  canActivate:[AuthGuardService]},
   {path:'login', component: LoginComponent},
   {path:'logout', component: LogoutComponent,canActivate:[AuthGuardService]},
   {path: '', component: DashboardComponent}

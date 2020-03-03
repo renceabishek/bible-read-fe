@@ -1,13 +1,27 @@
 <mat-toolbar class="navbar_fixed">
-  <mat-toolbar-row>
-    <div class='col-3'>
-      <button mat-button [routerLink]="'/'">
-        <!-- <mat-icon svgIcon="church" class="church-icon"></mat-icon> -->
-       <span style="font-family: cursive; font-size: 19px;"> CHRIST CHURCH YOUTH</span>
+  <mat-toolbar-row fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start center">
+    <div fxHide="true" fxShow.lt-md="true" fxFlex="10">
+      <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>more_vert</mat-icon>
       </button>
     </div>
-    <div class='col-9'>
-      <button mat-icon-button [matMenuTriggerFor]="menu1" style="float: right">
+    <div fxHide="true" fxShow.lt-md="true" fxFlex="90" fxLayoutAlign="center center">
+      <button mat-button [routerLink]="'/'">
+        <span style="font-family: cursive; font-size: 19px;"> CHRIST CHURCH YOUTH</span>
+      </button>
+    </div>
+    <div fxFlex="30" fxShow="true" fxHide.lt-md="true">
+      <button mat-button [routerLink]="'/'">
+        <!-- <mat-icon svgIcon="church" class="church-icon"></mat-icon> -->
+        <span style="font-family: cursive; font-size: 19px;"> CHRIST CHURCH YOUTH</span>
+      </button>
+    </div>
+    <div fxShow="true" fxFlex="50" fxHide.lt-md="true">
+      <button mat-button [routerLink]="'/about'"> About </button>
+      <button mat-button [routerLink]="'/members'"> Members </button>
+      <button mat-button [routerLink]="'/biblereaders'"> Bible Readers </button>
+      <button mat-button [routerLink]="'/leaderboard'"> Leader Board </button>
+      <!-- <button mat-icon-button [matMenuTriggerFor]="menu1" fxFlex="15%">
         <mat-icon>menu</mat-icon>
       </button>
       <mat-menu #menu1="matMenu">
@@ -15,12 +29,41 @@
           <mat-icon>admin</mat-icon>
           <span>Admin</span>
         </button>
-      </mat-menu>
-      <button mat-button [routerLink]="'/members'" style="float: right"> Members </button>
-        <button mat-button [routerLink]="'/biblereaders'" style="float: right"> Bible Readers </button>
+      </mat-menu> -->
+
+    </div>
+    <div fxFlex fxShow="true" fxHide.lt-md="true" fxLayoutAlign="end center">
+      <button>
+        <mat-icon svgIcon="facebook"></mat-icon>
+      </button>
+      <button>
+        <mat-icon svgIcon="twitter"></mat-icon>
+      </button>
+      <button>
+        <mat-icon svgIcon="whatsapp"></mat-icon>
+      </button>
+      <button>
+        <mat-icon svgIcon="youtube"></mat-icon>
+      </button>
     </div>
 
   </mat-toolbar-row>
 
 </mat-toolbar>
-<router-outlet></router-outlet>
+
+
+<mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
+  <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+    fixedTopGap="56">
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/about'">About</a>
+      <a mat-list-item [routerLink]="'/members'">Members</a>
+      <a mat-list-item [routerLink]="'/biblereaders'">Bible Readers</a>
+      <a mat-list-item [routerLink]="'/leaderboard'">Leader Board</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

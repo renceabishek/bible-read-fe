@@ -15,7 +15,7 @@ export class AdminService {
   }
 
   public postParticipantsInfo(name, file) {
-    return this.http.post<any>('/admin/participants/post', { name: name, file: file })
+    return this.http.post<any>('/admin/participants/admin', { name: name, file: file })
     .subscribe(data => {
     })
   }

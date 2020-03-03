@@ -12,7 +12,7 @@ import { TotalcountComponent } from './totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
-import { PostComponent } from './post/post.component';
+import { AdminComponent } from './admin/admin.component';
 import { BibleInfoComponent } from './bible-info/bible-info.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import { CustomizeComponent } from './customize/customize.component';
@@ -22,6 +22,7 @@ import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
 import { AgGridModule } from 'ag-grid-angular';
 import { DatatableComponent } from './bible-info/datatable/datatable.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { DatatableComponent } from './bible-info/datatable/datatable.component';
     DashboardComponent,
     LoginComponent,
     LogoutComponent,
-    PostComponent,
+    AdminComponent,
     BibleInfoComponent,
     ParticipantsComponent,
     CustomizeComponent,
@@ -58,7 +59,8 @@ import { DatatableComponent } from './bible-info/datatable/datatable.component';
     MatSnackBarModule,
     MatMenuModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

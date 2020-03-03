@@ -8,6 +8,7 @@ import { merge } from 'rxjs/observable/merge';
 import { of as observableOf } from 'rxjs/observable/of';
 import { AdminService } from '../service/admin.service';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { CommonService } from '../service/commonService';
 
 @Component({
   selector: 'app-bible-info',
@@ -42,12 +43,12 @@ export class BibleInfoComponent implements OnInit {
 
 
   constructor(private chartServiceService: ChartServiceService, private formBuilder: FormBuilder,
-    private adminService: AdminService,public snackBar: MatSnackBar) { 
-
+    private adminService: AdminService,public snackBar: MatSnackBar, private commonService: CommonService) { 
+      
     }
 
   ngOnInit() {
-
+    //this.commonService.modifyMenuActive('bibleinfo');
     this.registerForm = this.formBuilder.group({
       date: ['', Validators.required],
       name: ['', Validators.required],
