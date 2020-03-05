@@ -1,0 +1,33 @@
+<div class="card-header responsive-font">
+    <div fxLayout="row" fxLayoutGap="2px">
+        <div fxFlex=" 40">
+            Name (Date)
+        </div>
+        <div fxFlex=" 20">
+            Books
+        </div>
+        <div fxFlex=" 20">
+            chapter
+        </div>
+        <div fxFlex=" 10">
+            From
+        </div>
+        <div fxFlex>
+            To
+        </div>
+    </div>
+</div>
+<div class="responsive-font">
+    <div class="overflowBar">
+        <div *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px" style="cursor: pointer;"
+            (click)="selectRow(element)" class="check">
+            <div fxFlex=" 40"><span class="responsive-font-header" style="color: green">{{element.name}}</span>
+                <span class="responsive-font-smaller">({{element.date}})</span>
+            </div>
+            <div fxFlex="20">{{element.portion}}</div>
+            <div fxFlex="20">{{element.chapter}}</div>
+            <div fxFlex="10">{{element.fromVerses}}</div>
+            <div fxFlex>{{element.toVerses}}</div>
+        </div>
+    </div>
+</div>

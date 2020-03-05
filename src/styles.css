@@ -8,3 +8,26 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: black !important;
 }
 
+@media screen and (min-width: 601px) {
+    .responsive-font-header {
+      font-size: 20px;
+    }
+    .responsive-font {
+        font-size: 15px;
+    }
+    .responsive-font-smaller {
+        font-size: 12px;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .responsive-font-header {
+      font-size: 15px;
+    }
+    .responsive-font {
+        font-size: 12px;
+    }
+    .responsive-font-smaller {
+        font-size: 8px;
+    }
+  }

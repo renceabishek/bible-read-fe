@@ -6,11 +6,12 @@ import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AuthGuardService } from './service/auth-guard.service';
-import { BibleInfoComponent } from './bible-info/bible-info.component';
-import { CustomizeComponent } from './customize/customize.component';
+import { BibleInfoComponent } from './admin/bible-info/bible-info.component';
+import { CustomizeComponent } from './admin/customize/customize.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import { MembersComponent } from './members/members.component';
 import { BiblereadersComponent } from './biblereaders/biblereaders.component';
+import { InstructionsComponent } from './admin/instructions/instructions.component';
 
 
 const routes: Routes = [
@@ -18,11 +19,13 @@ const routes: Routes = [
   {path:'members', component: MembersComponent},
   {path:'biblereaders', component: BiblereadersComponent},
   {path:'participants', component: ParticipantsComponent},
-  {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"aux"},
-  {path:'membersinfo', component: CustomizeComponent, canActivate:[AuthGuardService]},
-  {path:"instructions", component: AdminComponent,  canActivate:[AuthGuardService]},
+  {path:"check", component: AdminComponent,  canActivate:[AuthGuardService], children: [
+    {path:'instructions', component: InstructionsComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
+    {path:'membersinfo', component: CustomizeComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
+    {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"adminbar"}
+  ]},
   {path:'login', component: LoginComponent},
-  {path:'logout', component: LogoutComponent,canActivate:[AuthGuardService]},
+  {path:'logout', component: LogoutComponent},
   {path: '', component: DashboardComponent}
 ];
 

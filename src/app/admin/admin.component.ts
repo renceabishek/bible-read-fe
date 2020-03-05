@@ -3,6 +3,7 @@ import { AuthenticationService } from '../service/authentication.service';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CommonService } from '../service/commonService';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -12,12 +13,18 @@ import { CommonService } from '../service/commonService';
 export class AdminComponent implements OnInit {
 
   constructor(private matIconRegistry: MatIconRegistry, private loginService:AuthenticationService,
-    private domSanitizer: DomSanitizer, private commonService: CommonService) { 
+    private domSanitizer: DomSanitizer, private commonService: CommonService, private router: Router,
+    private route: ActivatedRoute) { 
     this.addMobileViewIcons()
   }
 
   ngOnInit() {
-    //this.commonService.modifyMenuActive('instructions');
+    if(this.commonService.getIdentifyRouteComponent()=='login') {
+      this.router.navigate([{ outlets: { adminbar: ['instructions'] } }], {relativeTo: this.route});
+    } else {
+      this.commonService.setIdentifyRouteComponent('other')
+    }
+    
   }
 
   addMobileViewIcons(): void {

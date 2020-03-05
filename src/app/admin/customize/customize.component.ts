@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Participants } from '../model/Participants';
-import { AdminService } from '../service/admin.service';
+import { Participants } from '../../model/Participants';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-customize',

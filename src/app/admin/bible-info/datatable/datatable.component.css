@@ -1,0 +1,9 @@
+div.overflowBar {
+    background-color: lightblue;
+    height: 450px;
+    overflow: scroll;
+}
+
+div.check:hover {
+    outline: auto;
+}

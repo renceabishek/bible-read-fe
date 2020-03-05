@@ -1,0 +1,78 @@
+<div fxLayout="row" fxLayout.xs="column">
+    <div class="card" fxFlex="50">
+        <h5 class="card-header responsive-font-header">Add/Modify Bible Readers Data</h5>
+        <div class="card-body responsive-font">
+            <form [formGroup]="registerForm" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center"
+            fxLayoutAlign.xs="start stretch"
+                fxLayoutGap="4px grid">
+                <div fxFlex="40">
+                    <input type="text" formControlName="name" class="form-control" [matAutocomplete]="autoname"
+                        placeholder="Name" (click)="openNameDialog()" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
+                        <div *ngIf="name.errors.required">Name is required</div>
+                    </div>
+                    <mat-autocomplete #autoname="matAutocomplete">
+                        <mat-option *ngFor="let name of filteredNames | async" [value]="name">
+                            {{name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div fxFlex="25">
+                    <input type="date" formControlName="date" class="form-control" placeholder="Date" />
+
+                    <div *ngIf="date.invalid && (date.dirty || date.touched)" class="invalid-feedback">
+                        <div *ngIf="date.errors.required">Date is required</div>
+                    </div>
+                </div>
+                <div fxFlex="30">
+
+                    <input type="text" formControlName="books" class="form-control" [matAutocomplete]="autobooks"
+                        placeholder="Books" [ngClass]="{ 'is-invalid': submitted && books.errors }" />
+
+                    <div *ngIf="books.invalid && (books.dirty || books.touched)" class="invalid-feedback">
+                        <div *ngIf="books.errors.required">Book Name is required</div>
+                    </div>
+                    <mat-autocomplete #autobooks="matAutocomplete">
+                        <mat-option *ngFor="let book of filteredBooks | async" [value]="book">
+                            {{book}}
+                        </mat-option>
+                    </mat-autocomplete>
+
+                </div>
+                <div fxFlex="15">
+                    <input type="text" formControlName="chapter" class="form-control" placeholder="Chapter" />
+
+                    <div *ngIf="chapter.invalid && (chapter.dirty || chapter.touched)" class="invalid-feedback">
+                        <div *ngIf="chapter.errors.required">Chapter is required</div>
+                    </div>
+                </div>
+                <div fxFlex="20">
+                    <input type="text" formControlName="fromVerse" class="form-control" placeholder="From Verse" />
+
+                    <div *ngIf="fromVerse.invalid && (fromVerse.dirty || fromVerse.touched)" class="invalid-feedback">
+                        <div *ngIf="fromVerse.errors.required">Chapter is required</div>
+                    </div>
+                </div>
+                <div fxFlex="20">
+                    <input type="text" formControlName="toVerse" class="form-control" placeholder="To Verse" />
+
+                    <div *ngIf="toVerse.invalid && (toVerse.dirty || toVerse.touched)" class="invalid-feedback">
+                        <div *ngIf="toVerse.errors.required">Chapter is required</div>
+                    </div>
+                </div>
+
+            </form>
+            <br>
+            <div fxLayout="row wrap" fxLayout.xs="row" fxLayoutAlign="center center"
+                fxLayoutGap="4px">
+                <button fxFlex="20" class="btn btn-primary" (click)="onSave()">Save</button>
+                <button fxFlex="20" class="btn btn-secondary" type="reset" (click)="onReset()">Clear</button>
+                <button fxFlex="20" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+            </div>
+        </div>
+    </div>
+    <div class="card" fxFlex>
+        <app-datatable></app-datatable>
+    </div>
+</div>

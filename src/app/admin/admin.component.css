@@ -2,3 +2,11 @@
     background-color: thistle !IMPORTANT;
     /* box-shadow: rgb(136, 136, 136) 0px -4px 43px; */
 }
+
+.active-link {
+    border: 1px solid;
+}
+
+button {
+    outline: none;
+}

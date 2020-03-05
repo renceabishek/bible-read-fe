@@ -5,16 +5,20 @@
     >
     <nav class="navbar-nav" fxShow="true" fxFlex fxHide.lt-sm="true" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.gt-xs="space-evenly center">
       <li id="ccy-li-instruction" class="nav-item active">
-        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/instructions" class="nav-link ccy-fblack">Instructions</a>
+        <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['instructions'] } }]" 
+        class="nav-link ccy-fblack" routerLinkActive="active-link">Instructions</a>
       </li>
       <li id="ccy-li-membersinfo" class="nav-item">
-        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/membersinfo" class="nav-link ccy-fblack">Youth Members</a>
+        <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['membersinfo'] } }]" 
+        class="nav-link ccy-fblack" routerLinkActive="active-link">Youth Members</a>
       </li>
       <li id="ccy-li-bibleinfo" class="nav-item">
-        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/bibleinfo" class="nav-link ccy-fblack">Bible Info</a>
+        <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['bibleinfo'] } }]" 
+        class="nav-link ccy-fblack" routerLinkActive="active-link">Bible Info</a>
       </li>
       <li id="ccy-li-meetings" class="nav-item">
-        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/meetings" class="nav-link ccy-fblack">Youth Meeting MoM</a>
+        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/meetings" routerLinkActive="active-link" 
+        class="nav-link ccy-fblack">Youth Meeting MoM</a>
       </li>
       <li id="ccy-li-login" class="nav-item">
         <a *ngIf="!loginService.isUserLoggedIn()" routerLink="/login" class="nav-link ccy-fblack">Login</a>
@@ -26,16 +30,20 @@
     </nav>
     <div fxHide="true" fxFlex fxShow.lt-sm="true" fxLayoutAlign.lt-sm="space-evenly center"
       *ngIf="loginService.isUserLoggedIn()">
-      <button mat-icon-button routerLink="/instructions" >
+      <button mat-icon-button [routerLink]="[{ outlets: { adminbar: ['instructions'] } }]" 
+        routerLinkActive="active-link" >
         <mat-icon svgIcon='instruction'></mat-icon>
       </button>
-      <button mat-icon-button routerLink="/membersinfo">
+      <button mat-icon-button [routerLink]="[{ outlets: { adminbar: ['membersinfo'] } }]" 
+        routerLinkActive="active-link">
         <mat-icon svgIcon='members'></mat-icon>
       </button>
-      <button mat-icon-button routerLink="{ outlets: { primary: ['bibleinfo'],aux: ['bibleinfo'] } }">
+      <button mat-icon-button [routerLink]="[{ outlets: { adminbar: ['bibleinfo'] } }]"
+        routerLinkActive="active-link">
         <mat-icon svgIcon='bible'></mat-icon>
       </button>
-      <button mat-icon-button routerLink="/meetings">
+      <button mat-icon-button routerLink="/meetings"
+        routerLinkActive="active-link">
         <mat-icon svgIcon='meeting'></mat-icon>
       </button>
       <button mat-icon-button routerLink="/logout">
@@ -44,4 +52,4 @@
       </div>
   </div>
 </header>
-<router-outlet name="aux"></router-outlet>  
+<router-outlet name="adminbar"></router-outlet>  

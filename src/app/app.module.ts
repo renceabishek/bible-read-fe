@@ -6,23 +6,26 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule  } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule,MatDialogModule  } from  '@angular/material';
 import { MatMenuModule} from '@angular/material/menu';
 import { TotalcountComponent } from './totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AdminComponent } from './admin/admin.component';
-import { BibleInfoComponent } from './bible-info/bible-info.component';
+import { BibleInfoComponent } from './admin/bible-info/bible-info.component';
 import { ParticipantsComponent } from './participants/participants.component';
-import { CustomizeComponent } from './customize/customize.component';
+import { CustomizeComponent } from './admin/customize/customize.component';
 import { MembersComponent } from './members/members.component';
 import { BiblereadersComponent } from './biblereaders/biblereaders.component';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
 import { AgGridModule } from 'ag-grid-angular';
-import { DatatableComponent } from './bible-info/datatable/datatable.component';
+import { DatatableComponent } from './admin/bible-info/datatable/datatable.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { InstructionsComponent } from './admin/instructions/instructions.component';
+import { YouthmeetingsComponent } from './admin/youthmeetings/youthmeetings.component';
+import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-complete-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MembersComponent,
     BiblereadersComponent,
     CarouselComponent,
-    DatatableComponent
+    DatatableComponent,
+    InstructionsComponent,
+    YouthmeetingsComponent,
+    AutoCompleteDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -60,8 +66,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatDialogModule
   ],
+  entryComponents: [AutoCompleteDialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
