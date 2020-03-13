@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Inject } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { DailyData } from 'src/app/model/DailyData';
 import { AdminService } from 'src/app/service/admin.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-datatable',
@@ -17,7 +18,11 @@ export class DatatableComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private adminService: AdminService) { }
+  @Output() rowValue: EventEmitter<DailyData> =   new EventEmitter();
+
+  constructor(private adminService: AdminService,  @Inject(DOCUMENT) private document: Document) {
+    
+   }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
@@ -28,7 +33,31 @@ export class DatatableComponent implements OnInit {
   }
 
   selectRow(row) {
-    console.log(row.name);
+    this.rowValue.emit(row);
+  }
+
+  UpdateRowValues(dailyData, uniqueId) {
+    for(let i=0;i< this.ELEMENT_DATA.length;i++){
+      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
+        this.ELEMENT_DATA[i].name = dailyData.name;
+        this.ELEMENT_DATA[i].date = dailyData.date;
+        this.ELEMENT_DATA[i].portion = dailyData.portion;
+        this.ELEMENT_DATA[i].chapter = dailyData.chapter;
+        this.ELEMENT_DATA[i].fromVerses = dailyData.fromVerses;
+        this.ELEMENT_DATA[i].toVerses = dailyData.toVerses;
+      }
+    }
+    
+  }
+
+  saveRowValues(dailyData) {
+    this.ELEMENT_DATA.push(dailyData);
+  }
+
+  deleteRowValues(uniqueId) {
+    let deldailyData: DailyData;
+    let index=this.ELEMENT_DATA.indexOf(uniqueId)
+    this.ELEMENT_DATA.splice(index)
   }
 
 }

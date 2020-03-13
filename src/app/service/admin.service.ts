@@ -29,6 +29,10 @@ export class AdminService {
    return this.http.post('/bible/all', dailyData,  { responseType: 'text'});
   }
 
+  public putBibleInfo(dailyData, uniqueId): Observable<any> {
+   return this.http.put('/bible/all/'+uniqueId, dailyData,  { responseType: 'text'});
+  }
+
   public deleteBibleInfo(uniqueId): Observable<any> {
     return this.http.delete<any>('/bible/date/'+uniqueId);
   }
