@@ -19,8 +19,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         font-size: 12px;
     }
   }
+
+  @media screen and (min-width: 450px) and (max-width: 600px) {
+    .responsive-font-header {
+      font-size: 18px;
+    }
+    .responsive-font {
+        font-size: 14px;
+    }
+    .responsive-font-smaller {
+        font-size: 10px;
+    }
+  }
   
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 449px) {
     .responsive-font-header {
       font-size: 15px;
     }

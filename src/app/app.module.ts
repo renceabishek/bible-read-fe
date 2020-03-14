@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule,MatDialogModule  } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule,MatDialogModule,MatDatepickerModule,MatNativeDateModule  } from  '@angular/material';
 import { MatMenuModule} from '@angular/material/menu';
 import { TotalcountComponent } from './totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -15,7 +15,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { AdminComponent } from './admin/admin.component';
 import { BibleInfoComponent } from './admin/bible-info/bible-info.component';
 import { ParticipantsComponent } from './participants/participants.component';
-import { CustomizeComponent } from './admin/customize/customize.component';
+import { YouthMembersComponent } from './admin/members/members.component';
 import { MembersComponent } from './members/members.component';
 import { BiblereadersComponent } from './biblereaders/biblereaders.component';
 import { CarouselComponent } from './carousel/carousel.component';
@@ -26,6 +26,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { InstructionsComponent } from './admin/instructions/instructions.component';
 import { YouthmeetingsComponent } from './admin/youthmeetings/youthmeetings.component';
 import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-complete-dialog.component';
+import { LottieAnimationViewModule } from 'ng-lottie';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-
     AdminComponent,
     BibleInfoComponent,
     ParticipantsComponent,
-    CustomizeComponent,
+    YouthMembersComponent,
     MembersComponent,
     BiblereadersComponent,
     CarouselComponent,
@@ -51,6 +52,7 @@ import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-
     ReactiveFormsModule,
     FormsModule,
     AgGridModule.withComponents([]),
+    LottieAnimationViewModule.forRoot(),
     AppRoutingModule,
     NgbModule,
     BrowserAnimationsModule,
@@ -66,11 +68,13 @@ import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     FlexLayoutModule,
     MatDialogModule
   ],
   entryComponents: [AutoCompleteDialogComponent],
-  providers: [],
+  providers: [ MatDatepickerModule ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

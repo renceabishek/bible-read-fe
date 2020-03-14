@@ -11,3 +11,14 @@
   td {
     padding-right: 8px;
   }
+
+  mat-form-field {
+  margin-right: 12px;
+}
+
+.lottie-size {
+  max-width: '100vm';
+  max-height: '100vh';
+  height: 100%;
+  width: 100%;
+}

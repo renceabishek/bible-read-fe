@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AuthGuardService } from './service/auth-guard.service';
 import { BibleInfoComponent } from './admin/bible-info/bible-info.component';
-import { CustomizeComponent } from './admin/customize/customize.component';
+import { YouthMembersComponent } from './admin/members/members.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import { MembersComponent } from './members/members.component';
 import { BiblereadersComponent } from './biblereaders/biblereaders.component';
@@ -21,7 +21,7 @@ const routes: Routes = [
   {path:'participants', component: ParticipantsComponent},
   {path:"check", component: AdminComponent,  canActivate:[AuthGuardService], children: [
     {path:'instructions', component: InstructionsComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
-    {path:'membersinfo', component: CustomizeComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
+    {path:'membersinfo', component: YouthMembersComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
     {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"adminbar"}
   ]},
   {path:'login', component: LoginComponent},

@@ -1,9 +1,9 @@
 <div fxLayout="row" fxLayout.xs="column">
     <div class="card" fxFlex="50">
         <h5 class="card-header responsive-font-header">Add/Modify Bible Readers Data</h5>
-        <div class="card-body responsive-font">
-            <form [formGroup]="registerForm" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center"
-            fxLayoutAlign.xs="start stretch" fxLayout.sm="column" fxLayoutAlign.sm="start stretch"
+        <div class="card-body">
+            <form [formGroup]="registerForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center"
+                fxLayoutAlign.xs="start stretch" fxLayout.sm="column" fxLayoutAlign.sm="start stretch"
                 fxLayoutGap="4px grid" (ngSubmit)="onSave()">
                 <div fxFlex="40" fxShow="true" fxHide.lt-md="true">
                     <input type="text" formControlName="name" class="form-control" [matAutocomplete]="autoname"
@@ -19,16 +19,21 @@
                     </mat-autocomplete>
                 </div>
                 <div fxFlex="40" fxHide="true" fxShow.lt-md="true">
-                    <input type="button" formControlName="name" class="form-control" 
-                        placeholder="Name" (click)="openNameDialog()" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                    <input type="button" formControlName="name" class="form-control" placeholder="Name"
+                        (click)="openNameDialog()" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                 </div>
-                <div fxFlex="25" fxShow="true" fxHide.lt-md="true">
-                    <input type="date" formControlName="date" class="form-control" placeholder="Date"
-                    [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
+                <div fxFlex="35" fxShow="true" fxHide.lt-md="true">
+                    <mat-form-field>
+                        <input formControlName="date" class="form-control" matInput [matDatepicker]="picker1"
+                             placeholder="Date"
+                            [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
 
-                    <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
-                        <div *ngIf="f.date.errors.required">Date is required</div>
-                    </div>
+                        <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
+                            <div *ngIf="f.date.errors.required">Date is required</div>
+                        </div>
+                    </mat-form-field>
                 </div>
                 <div fxFlex="25" fxHide="true" fxShow.lt-md="true">
                     <input type="button" formControlName="date" class="form-control" placeholder="Date" />
@@ -49,9 +54,9 @@
 
                 </div>
                 <div fxFlex="15">
-                    <input type="text" formControlName="chapter" class="form-control" placeholder="Chapter" 
-                    [ngClass]="{ 'is-invalid': submitted && f.chapter.errors }" 
-                    minlength="1" maxlength="3" (keypress)="numberValidator($event)"/>
+                    <input type="text" formControlName="chapter" class="form-control" placeholder="Chapter"
+                        [ngClass]="{ 'is-invalid': submitted && f.chapter.errors }" minlength="1" maxlength="3"
+                        (keypress)="numberValidator($event)" />
 
                     <div *ngIf="submitted && f.chapter.errors" class="invalid-feedback">
                         <div *ngIf="f.chapter.errors.required">Chapter is required</div>
@@ -59,17 +64,17 @@
                 </div>
                 <div fxFlex="20">
                     <input type="text" formControlName="fromVerse" class="form-control" placeholder="From Verse"
-                    [ngClass]="{ 'is-invalid': submitted && f.fromVerse.errors }" 
-                    minlength="1" maxlength="3" (keypress)="numberValidator($event)" />
+                        [ngClass]="{ 'is-invalid': submitted && f.fromVerse.errors }" minlength="1" maxlength="3"
+                        (keypress)="numberValidator($event)" />
 
                     <div *ngIf="submitted && f.fromVerse.errors" class="invalid-feedback">
                         <div *ngIf="f.fromVerse.errors.required">FromVerse is required</div>
                     </div>
                 </div>
                 <div fxFlex="20">
-                    <input type="text" formControlName="toVerse" class="form-control" placeholder="To Verse" 
-                    [ngClass]="{ 'is-invalid': submitted && f.toVerse.errors }"
-                    minlength="1" maxlength="3" (keypress)="numberValidator($event)" />
+                    <input type="text" formControlName="toVerse" class="form-control" placeholder="To Verse"
+                        [ngClass]="{ 'is-invalid': submitted && f.toVerse.errors }" minlength="1" maxlength="3"
+                        (keypress)="numberValidator($event)" />
 
                     <div *ngIf="submitted && f.toVerse.errors" class="invalid-feedback">
                         <div *ngIf="f.toVerse.errors.required">To Verse is required</div>
@@ -78,19 +83,24 @@
                         </div>
                     </div>
                 </div>
-                <br>
-                <div fxLayout="row wrap" fxLayout.lt.sm="column" fxLayoutAlign="center center"
-                    fxLayoutGap="4px">
-                    <button id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary" type="submit" >Save</button>
-                    <button id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary" type="submit" >Update</button>
-                    <button fxFlex="20" class="btn btn-secondary" type="reset" (click)="onReset()">Clear</button>
-                    <button fxFlex="20" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+                <div fxFlex="100" fxLayout="row" fxLayout.lt.sm="column" fxLayoutAlign="end center"
+                    fxLayoutAlign.lt-md="center center" fxLayoutGap="4px">
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary"
+                        type="submit">Save</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary"
+                        type="submit">Update</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
                 </div>
             </form>
             <br>
         </div>
     </div>
     <div class="card" fxFlex>
-        <app-datatable (rowValue)="selectRowValue($event)" ></app-datatable>
+        <app-datatable (rowValue)="selectRowValue($event)"></app-datatable>
     </div>
 </div>
+<lottie-animation-view *ngIf="loading" class="lottie-size"
+                    [options]="lottieConfig"
+                    (animCreated)="handleAnimation($event)">
+    </lottie-animation-view>

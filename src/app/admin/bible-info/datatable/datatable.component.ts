@@ -56,8 +56,13 @@ export class DatatableComponent implements OnInit {
 
   deleteRowValues(uniqueId) {
     let deldailyData: DailyData;
-    let index=this.ELEMENT_DATA.indexOf(uniqueId)
-    this.ELEMENT_DATA.splice(index)
+    for(let i=0;i< this.ELEMENT_DATA.length;i++){
+      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
+        this.ELEMENT_DATA.splice(i,1)
+        return;
+      }
+    }
+    
   }
 
 }

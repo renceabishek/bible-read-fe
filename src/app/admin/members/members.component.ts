@@ -4,11 +4,11 @@ import { Participants } from '../../model/Participants';
 import { AdminService } from '../../service/admin.service';
 
 @Component({
-  selector: 'app-customize',
-  templateUrl: './customize.component.html',
-  styleUrls: ['./customize.component.css']
+  selector: 'app-youthmembers',
+  templateUrl: './members.component.html',
+  styleUrls: ['./members.component.css']
 })
-export class CustomizeComponent implements OnInit {
+export class YouthMembersComponent implements OnInit {
 
   name = '';
   file = '';
