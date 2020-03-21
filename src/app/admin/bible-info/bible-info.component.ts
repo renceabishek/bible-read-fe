@@ -132,19 +132,19 @@ export class BibleInfoComponent implements OnInit {
 
 
   onSave() {
-    this.anim.play();
+    //this.anim.play();
     if(this.crudFlag=="delete" || this.crudFlag=="clear") {
       console.log("delete or clear")
       this.submitted = false;
       this.crudFlag="";
-      this.anim.stop();
+     // this.anim.stop();
       return;
     }
 
     this.submitted = true;
     if (this.registerForm.invalid) {
       console.log("form vali")
-      this.anim.stop();
+     // this.anim.stop();
       return;
     }
     
@@ -166,7 +166,7 @@ export class BibleInfoComponent implements OnInit {
       .subscribe(data => {
         createDailyData.uniqueId = data;
         this.child.saveRowValues(createDailyData);
-        this.anim.stop();
+       // this.anim.stop();
         console.log("successfully saved");
         this.onReset();
         this.successSnackBar();
@@ -187,7 +187,7 @@ export class BibleInfoComponent implements OnInit {
     this.adminService.putBibleInfo(createDailyData, this.uniqueId)
     .subscribe(data=> {
       this.child.UpdateRowValues(createDailyData, this.uniqueId)
-      this.anim.stop();
+     // this.anim.stop();
       this.onReset();
       this.successSnackBar();
     })

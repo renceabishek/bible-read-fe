@@ -17,6 +17,14 @@
                             accept=".png, .jpg, .jpeg" (change)="changeListener($event)"
                         [ngClass]="{ 'is-invalid': submitted && f.file.errors }" />
                 </div>
+                <div>
+                    <label htmlFor="photo-upload" className="custom-file-upload fas">
+                        <div className="img-wrap img-upload" >
+                          <img for="photo-upload" src={src}/>
+                        </div>
+                        <input id="photo-upload" type="file" (change)="changeListener($event)"/> 
+                    </label>
+                </div>
                 <div class="form-group col-3">
                     <button class="btn btn-primary mr-1">ADD</button>
                     <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
