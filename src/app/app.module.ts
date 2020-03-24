@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule,MatDialogModule,MatDatepickerModule,MatNativeDateModule  } from  '@angular/material';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatInputModule,MatAutocompleteModule,MatSnackBarModule, MatTableModule,MatPaginatorModule,MatDialogModule,MatDatepickerModule,MatNativeDateModule, MatButtonToggleModule, MatCheckboxModule  } from  '@angular/material';
 import { MatMenuModule} from '@angular/material/menu';
 import { TotalcountComponent } from './totalcount/totalcount.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -27,6 +27,7 @@ import { InstructionsComponent } from './admin/instructions/instructions.compone
 import { YouthmeetingsComponent } from './admin/youthmeetings/youthmeetings.component';
 import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-complete-dialog.component';
 import { LottieAnimationViewModule } from 'ng-lottie';
+import { SkillBoxComponent } from './admin/dialog/skill-box/skill-box.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { LottieAnimationViewModule } from 'ng-lottie';
     DatatableComponent,
     InstructionsComponent,
     YouthmeetingsComponent,
-    AutoCompleteDialogComponent
+    AutoCompleteDialogComponent,
+    SkillBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -70,10 +72,12 @@ import { LottieAnimationViewModule } from 'ng-lottie';
     MatPaginatorModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
     FlexLayoutModule,
     MatDialogModule
   ],
-  entryComponents: [AutoCompleteDialogComponent],
+  entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent],
   providers: [ MatDatepickerModule ],
   bootstrap: [AppComponent]
 })

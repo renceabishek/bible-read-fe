@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Participants } from '../model/Participants';
+import { Profile } from '../model/Profile';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DailyData } from '../model/DailyData';
+import { ProfileGet } from '../model/ProfilesGet';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,20 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  public getParticipantsInfo(): Observable<Participants[]> {
-    return this.http.get<Participants[]>('/admin/participants/all');
+  public getProfiles(): Observable<ProfileGet[]> {
+    return this.http.get<ProfileGet[]>('/admin/profile/all');
   }
 
-  public postParticipantsInfo(name, file) {
-    return this.http.post<any>('/admin/participants/admin', { name: name, file: file })
+  public getProfile(uniqueId): Observable<Profile> {
+    return this.http.get<Profile>('/admin/profile/'+uniqueId);
+  }
+
+  public saveProfile(profile): Observable<any> {
+    return this.http.post('/admin/profile', profile, { responseType: 'text'})
+  }
+
+  public updateProfile(profile, uniqueId) {
+    return this.http.put('/admin/profile'+uniqueId, profile,  { responseType: 'text'})
     .subscribe(data => {
     })
   }

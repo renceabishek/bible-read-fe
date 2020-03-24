@@ -26,9 +26,9 @@ export class BibleInfoComponent implements OnInit {
   crudFlag: String;
 
   public lottieConfig: Object;
-    private anim: any;
-    private animationSpeed: number = 1;
-    loading=false;
+  private anim: any;
+  private animationSpeed: number = 1;
+  loading = false;
 
 
   myControl = new FormControl();
@@ -51,16 +51,16 @@ export class BibleInfoComponent implements OnInit {
   toVerse = '';
 
 
-  @ViewChild(DatatableComponent, {static: true} ) child: DatatableComponent ; 
+  @ViewChild(DatatableComponent, { static: true }) child: DatatableComponent;
 
   constructor(private formBuilder: FormBuilder,
     private adminService: AdminService, public snackBar: MatSnackBar, private commonService: CommonService,
     public dialog: MatDialog) {
-      this.lottieConfig = {
-        path: 'assets/loading.json',
-        renderer: 'canvas',
-        autoplay: false,
-        loop: true
+    this.lottieConfig = {
+      path: 'assets/loading.json',
+      renderer: 'canvas',
+      autoplay: false,
+      loop: true
     };
   }
 
@@ -87,13 +87,13 @@ export class BibleInfoComponent implements OnInit {
     this.registerForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
 
 
-    this.adminService.getParticipantsInfo().subscribe(data => {
-      this.nameData = data.map(f => f.name);
-      this.filteredNames = this.registerForm.controls['name'].valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filterName(value))
-        );
+    this.adminService.getProfiles().subscribe(data => {
+      // this.nameData = data.map(f => f.split("~")[0]);
+      // this.filteredNames = this.registerForm.controls['name'].valueChanges
+      //   .pipe(
+      //     startWith(''),
+      //     map(value => this._filterName(value))
+      //   );
     });
 
 
@@ -109,18 +109,18 @@ export class BibleInfoComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    if(value!=null) {
+    if (value != null) {
       const filterValue = value.toLowerCase();
       return this.listOfBooks.filter(option => option.toLowerCase().includes(filterValue));
     }
   }
 
   private _filterName(value: string): string[] {
-    if(value!=null) {
+    if (value != null) {
       const filterValue = value.toLowerCase();
       return this.nameData.filter(option => option.toLowerCase().includes(filterValue));
     }
-    
+
   }
 
   addBibleDetails() {
@@ -133,22 +133,22 @@ export class BibleInfoComponent implements OnInit {
 
   onSave() {
     //this.anim.play();
-    if(this.crudFlag=="delete" || this.crudFlag=="clear") {
+    if (this.crudFlag == "delete" || this.crudFlag == "clear") {
       console.log("delete or clear")
       this.submitted = false;
-      this.crudFlag="";
-     // this.anim.stop();
+      this.crudFlag = "";
+      // this.anim.stop();
       return;
     }
 
     this.submitted = true;
     if (this.registerForm.invalid) {
       console.log("form vali")
-     // this.anim.stop();
+      // this.anim.stop();
       return;
     }
-    
-    if(this.saveUP==true) {
+
+    if (this.saveUP == true) {
       return this.onUpdate();
     }
 
@@ -166,7 +166,7 @@ export class BibleInfoComponent implements OnInit {
       .subscribe(data => {
         createDailyData.uniqueId = data;
         this.child.saveRowValues(createDailyData);
-       // this.anim.stop();
+        // this.anim.stop();
         console.log("successfully saved");
         this.onReset();
         this.successSnackBar();
@@ -185,43 +185,43 @@ export class BibleInfoComponent implements OnInit {
     };
 
     this.adminService.putBibleInfo(createDailyData, this.uniqueId)
-    .subscribe(data=> {
-      this.child.UpdateRowValues(createDailyData, this.uniqueId)
-     // this.anim.stop();
-      this.onReset();
-      this.successSnackBar();
-    })
+      .subscribe(data => {
+        this.child.UpdateRowValues(createDailyData, this.uniqueId)
+        // this.anim.stop();
+        this.onReset();
+        this.successSnackBar();
+      })
   }
 
   onReset() {
     this.submitted = false;
-    this.uniqueId="";
-    this.crudFlag="clear";
+    this.uniqueId = "";
+    this.crudFlag = "clear";
     this.registerForm.controls.chapter.setValue('');
     this.registerForm.controls.fromVerse.setValue('');
-    this.registerForm.controls.toVerse.setValue('');    
+    this.registerForm.controls.toVerse.setValue('');
     this.registerForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
     this.registerForm.get('books').setValue('');
     this.registerForm.get('name').setValue('');
-    this.saveUP=false
-    
+    this.saveUP = false
+
   }
 
 
   rowTobeDeleted: string
 
-  disable:any;
+  disable: any;
   onDeleteRows(): void {
     //this.registerForm.disable()
-    this.crudFlag="delete";
-    console.log('deleted '+this.uniqueId)
-    if(this.uniqueId.length>0) {
+    this.crudFlag = "delete";
+    console.log('deleted ' + this.uniqueId)
+    if (this.uniqueId.length > 0) {
       this.adminService.deleteBibleInfo(this.uniqueId)
-      .subscribe(data=> {
-        this.child.deleteRowValues(this.uniqueId)
-        this.onReset();
-        this.successSnackBar();
-      })
+        .subscribe(data => {
+          this.child.deleteRowValues(this.uniqueId)
+          this.onReset();
+          this.successSnackBar();
+        })
     }
   }
 

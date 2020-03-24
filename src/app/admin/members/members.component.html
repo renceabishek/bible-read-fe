@@ -1,34 +1,123 @@
 <div class="card m-3">
-    <h5 class="card-header">Add/Modify Youth Members detail</h5>
+    <div class="card-header" fxLayout="row" fxLayoutAlign="start center">
+        <h5 fxFlex="60">Add/Modify Youth Members detail</h5>
+        <div fxFlex fxShow="true" fxHide.lt-md="true">
+            <form [formGroup]="searchProfiles" fxLayout="row">
+                <input type="text" fxFlex="90" formControlName="search" [(ngModel)]="value" class="form-control"
+                    [matAutocomplete]="autoname" placeholder="Search"/>
+                <mat-autocomplete #autoname="matAutocomplete" [displayWith]="displayFn"
+                    (optionSelected)="selectName($event.option.value)">
+                    <mat-option *ngFor="let fprofile of filteredNames | async" [value]="fprofile">
+                        {{fprofile.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <button fxFlex mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </form>
+        </div>
+        <div fxFlex.lt-md fxLayout.lt-md="row" fxHide="true" fxShow.lt-md="true" fxLayoutAlign.ld-md="end center">
+            <mat-icon >search</mat-icon>
+        </div>
+        
+    </div>
+
+    <div>
+        <div class="avatar-upload">
+            <div class="avatar-edit">
+                <input type='file' id="imageUpload" (change)="changeListener($event)" accept=".png, .jpg, .jpeg" />
+                <label for="imageUpload"></label>
+            </div>
+            <div class="avatar-preview">
+                <img id="imagePreview" [src]="avatarBackGround">
+            </div>
+        </div>
+    </div>
     <div class="card-body">
-        <form [formGroup]="addParticipants" (ngSubmit)="onSubmit()">
-            <div class="form-row">
-                <div class="form-group col-2">
-                    <label>Name</label>
-                    <input type="text" formControlName="name" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+        <form [formGroup]="profiles" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
+            fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
+            fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSubmit()">
+
+
+            <div fxFlex="20">
+                <mat-form-field class="example-full-width">
+                    <mat-label>NAME</mat-label>
+                    <input matInput placeholder="Enter the name" formControlName="name"
+                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Name is required</div>
                     </div>
+                </mat-form-field>
+                <!-- <label>Name</label>
+                <input type="text" formControlName="name" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required">Name is required</div>
+                </div> -->
+            </div>
+            <div fxFlex="20">
+                <mat-form-field>
+                    <input formControlName="dob" matInput [matDatepicker]="picker1" placeholder="Enter D.O.B"
+                        [ngClass]="{ 'is-invalid': submitted && f.dob.errors }">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <div *ngIf="submitted && f.dob.errors" class="invalid-feedback">
+                        <div *ngIf="f.dob.errors.required">D.O.B is required</div>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div fxFlex="20">
+                <mat-button-toggle-group name="fontStyle" (change)="onSexChange($event.value)" 
+                        formControlName="sex" aria-label="Font Style"
+                    [ngClass]="{ 'is-invalid': submitted && f.sex.errors }">
+                    <mat-button-toggle value="male">Male</mat-button-toggle>
+                    <mat-button-toggle value="female">Female</mat-button-toggle>
+                </mat-button-toggle-group>
+                <div *ngIf="submitted && f.sex.errors" class="invalid-feedback">
+                    <div *ngIf="f.sex.errors.required">Sex is required</div>
                 </div>
-                <!-- <div class="form-group col-3">
+            </div>
+            <div fxFlex="20">
+                <mat-checkbox formControlName="isBibleReader">Is he/she a Bible Reader!</mat-checkbox>
+            </div>
+            <div fxFlex="40">
+                <mat-button-toggle-group name="fontStyle" formControlName="role" aria-label="Font Style">
+                    <mat-button-toggle value="member">Member</mat-button-toggle>
+                    <mat-button-toggle value="captain">Captain</mat-button-toggle>
+                    <mat-button-toggle value="vcaptain">Vice Captain</mat-button-toggle>
+                    <mat-button-toggle value="leader">Leader</mat-button-toggle>
+                </mat-button-toggle-group>
+                <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                    <div *ngIf="f.role.errors.required">role is required</div>
+                </div>
+            </div>
+            <div fxFlex="60" (click)="onSelectSkills()" style="border: 1px solid; height: 40px">
+                <span *ngFor="let skill of skillSet; let i = index">
+                    <span>{{skill}}
+                        <a mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSkills(i)">
+                            <mat-icon>close</mat-icon>
+                        </a>
+                    </span>
+                </span>
+            </div>
+            <div fxFlex="60">
+                <mat-form-field fxFlex="100">
+                    <mat-label>About</mat-label>
+                    <textarea matInput placeholder="About the Person" formControlName="about"></textarea>
+                    <div *ngIf="submitted && f.about.errors" class="invalid-feedback">
+                        <div *ngIf="f.about.errors.required">About is required</div>
+                    </div>
+                </mat-form-field>
+            </div>
+            <!-- <div class="form-group col-3">
                     <label>File Upload</label>
                     <input type="file" formControlName="file" class="form-control box__file"
                             accept=".png, .jpg, .jpeg" (change)="changeListener($event)"
                         [ngClass]="{ 'is-invalid': submitted && f.file.errors }" />
                 </div> -->
 
-                <div class="avatar-upload">
-                    <div class="avatar-edit">
-                        <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-                        <label for="imageUpload"></label>
-                    </div>
-                    <div class="avatar-preview">
-                        <div id="imagePreview" style="background-image: url('../../../assets/admin/profilepic/male.jpg');">
-                        </div>
-                    </div>
-                </div>
-                <!-- <div>
+
+            <!-- <div>
                     <label htmlFor="photo-upload" className="custom-file-upload fas">
                         <div className="img-wrap img-upload" >
                           <img for="photo-upload" src={src}/>
@@ -36,16 +125,17 @@
                         <input id="photo-upload" type="file" (change)="changeListener($event)"/> 
                     </label>
                 </div> -->
-                <div class="form-group col-3">
-                    <button class="btn btn-primary mr-1">ADD</button>
-                    <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
-                </div>
+            <div class="form-group col-3">
+                <button class="btn btn-primary mr-1" fxHide={{saveUP}}>Save</button>
+                <button class="btn btn-primary mr-1" fxHide={{!saveUP}}>Update</button>
+                <button class="btn btn-secondary"  (click)="onClear()">Cancel</button>
+                <button class="btn btn-danger" (click)="onDeleteProfile()">Delete</button>
             </div>
 
         </form>
-        <ag-grid-angular style="width: 200px; height: 200px;" class="ag-theme-balham" [rowData]="rowData"
+        <!-- <ag-grid-angular style="width: 200px; height: 200px;" class="ag-theme-balham" [rowData]="rowData"
             [columnDefs]="columnDefs">
-        </ag-grid-angular>
+        </ag-grid-angular> -->
     </div>
     <!-- <img *ngFor="let item of base64textString"  src={{item}} alt="" id="img"> -->
 </div>

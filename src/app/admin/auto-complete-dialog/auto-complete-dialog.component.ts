@@ -18,7 +18,7 @@ export class AutoCompleteDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.adminService.getParticipantsInfo().subscribe(data => {
+    this.adminService.getProfiles().subscribe(data => {
       // this.nameData = data.map(f => f.name);
       // this.filteredNames = this.registerForm.controls['name'].valueChanges
       //   .pipe(

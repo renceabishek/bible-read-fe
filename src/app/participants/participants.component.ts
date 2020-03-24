@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../service/admin.service';
-import { Participants } from '../model/Participants';
+import { Profile } from '../model/Profile';
 
 @Component({
   selector: 'app-participants',
@@ -9,17 +9,17 @@ import { Participants } from '../model/Participants';
 })
 export class ParticipantsComponent implements OnInit {
 
-  partcipiants: Participants[];
+  partcipiants: Profile[];
 
   constructor(private adminService: AdminService) { }
 
   ngOnInit() {
-    this.adminService.getParticipantsInfo().subscribe(data=>{
-     let modelpartcipiants: Participants[];
-     modelpartcipiants=data;
+    this.adminService.getProfiles().subscribe(data=>{
+     //let modelpartcipiants: Participants[];
+   //  modelpartcipiants=data;
     // modelpartcipiants.forEach(f=>f.file=atob(f.file))
      
-      this.partcipiants=modelpartcipiants;
+    //  this.partcipiants=modelpartcipiants;
     });
   }
 
