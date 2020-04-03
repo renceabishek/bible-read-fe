@@ -7,7 +7,7 @@ export class Profile {
     role: string
     skills: [string]
     about: string
-    file: string
+    profileUrl: string
     createdDate: Date
     updatedDate: Date
     totalBibleWords: number

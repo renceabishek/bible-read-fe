@@ -17,7 +17,7 @@
         class="nav-link ccy-fblack" routerLinkActive="active-link">Bible Info</a>
       </li>
       <li id="ccy-li-meetings" class="nav-item">
-        <a *ngIf="loginService.isUserLoggedIn()" routerLink="/meetings" routerLinkActive="active-link" 
+        <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['meetings'] } }]" routerLinkActive="active-link" 
         class="nav-link ccy-fblack">Youth Meeting MoM</a>
       </li>
       <li id="ccy-li-login" class="nav-item">

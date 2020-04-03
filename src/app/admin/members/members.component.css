@@ -52,7 +52,8 @@ h1.small {
 
 .avatar-edit {
   position: absolute;
-  right: 12px;
+  /* right: 12px; */
+  margin-left: 58px;
   z-index: 1;
   top: 10px;
   

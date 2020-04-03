@@ -12,6 +12,7 @@ import { ParticipantsComponent } from './participants/participants.component';
 import { MembersComponent } from './members/members.component';
 import { BiblereadersComponent } from './biblereaders/biblereaders.component';
 import { InstructionsComponent } from './admin/instructions/instructions.component';
+import { YouthmeetingsComponent } from './admin/youthmeetings/youthmeetings.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
   {path:"check", component: AdminComponent,  canActivate:[AuthGuardService], children: [
     {path:'instructions', component: InstructionsComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
     {path:'membersinfo', component: YouthMembersComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
-    {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"adminbar"}
+    {path:'bibleinfo', component: BibleInfoComponent, canActivate:[AuthGuardService], outlet:"adminbar"},
+    {path:'meetings', component: YouthmeetingsComponent, canActivate:[AuthGuardService], outlet:"adminbar"}
   ]},
   {path:'login', component: LoginComponent},
   {path:'logout', component: LogoutComponent},
