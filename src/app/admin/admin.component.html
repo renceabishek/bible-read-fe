@@ -20,6 +20,10 @@
         <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['meetings'] } }]" routerLinkActive="active-link" 
         class="nav-link ccy-fblack">Youth Meeting MoM</a>
       </li>
+      <li id="ccy-li-meetings" class="nav-item">
+        <a *ngIf="loginService.isUserLoggedIn()" [routerLink]="[{ outlets: { adminbar: ['activity'] } }]" routerLinkActive="active-link" 
+        class="nav-link ccy-fblack">Activity</a>
+      </li>
       <li id="ccy-li-login" class="nav-item">
         <a *ngIf="!loginService.isUserLoggedIn()" routerLink="/login" class="nav-link ccy-fblack">Login</a>
       </li>
@@ -42,7 +46,7 @@
         routerLinkActive="active-link">
         <mat-icon svgIcon='bible'></mat-icon>
       </button>
-      <button mat-icon-button routerLink="/meetings"
+      <button mat-icon-button [routerLink]="[{ outlets: { adminbar: ['meetings'] } }]"
         routerLinkActive="active-link">
         <mat-icon svgIcon='meeting'></mat-icon>
       </button>

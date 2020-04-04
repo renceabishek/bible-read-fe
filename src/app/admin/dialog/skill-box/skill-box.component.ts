@@ -29,7 +29,9 @@ export class SkillBoxComponent implements OnInit {
   selection = new SelectionModel<PeriodicElement>(true, []);
 
   constructor(public dialogRef: MatDialogRef<SkillBoxComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { 
+      console.log("element values "+this.ELEMENT_DATA)
+    }
 
   ngOnInit() {
   }

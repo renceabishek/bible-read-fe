@@ -1,1 +1,184 @@
-<p>youthmeetings works!</p>
+<div fxLayout="row" fxLayout.xs="column">
+    <div class="card" fxFlex="100">
+        <h5 class="card-header responsive-font-header">Youth meeting Minutes of Meeting Details</h5>
+        <div class="card-body">
+            <form [formGroup]="meetingsForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
+                fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
+                fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
+
+                <!-- <div fxFlex="20">
+                    <mat-form-field>
+                        <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Date of Meeting">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="errorHandling('date', 'required')">
+                            Date of Meeting is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">M.O.C</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let moc of selectedMocNames; let i = index">
+                            <span>{{moc}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'moc')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('moc')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">ARRANGEMENTS</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let arrange of selectedArrangeNames; let i = index">
+                            <span>{{arrange}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'arrange')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('arrange')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">WORSHIPERS</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let worshipers of selectedWorshipersNames; let i = index">
+                            <span>{{worshipers}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'worshipers')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('worshipers')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">MUSICIANS</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let musicians of selectedMusiciansNames; let i = index">
+                            <span>{{musicians}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'musicians')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('musicians')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div  fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">SINGERS</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let singers of selectedSingersNames; let i = index">
+                            <span>{{singers}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'singers')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('singers')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                        <mat-label fxFlex="30" style="text-align: right">SONGS</mat-label>
+                        <textarea fxFlex="60" matInput placeholder="Enter the List of songs" formControlName="songs"></textarea>
+                        <mat-error *ngIf="errorHandling('songs', 'required')">
+                            You must provide About details
+                        </mat-error>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">TESTIMONY</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let testimony of selectedTestimonyNames; let i = index">
+                            <span>{{testimony}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'testimony')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('testimony')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div  fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">WORD OF GOD</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let wog of selectedWogNames; let i = index">
+                            <span>{{wog}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'wog')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('wog')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                        <mat-label fxFlex="30" style="text-align: right">ABOUT</mat-label>
+                        <textarea fxFlex="60" matInput placeholder="Enter what was discussed" formControlName="aboutWog"></textarea>
+                        <mat-error *ngIf="errorHandling('aboutWog', 'required')">
+                            You must provide Discussions details
+                        </mat-error>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">OTHERS</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let others of selectedOthersNames; let i = index">
+                            <span>{{others}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'others')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('others')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">ABOUT</mat-label>
+                    <textarea fxFlex="60" matInput placeholder="Enter If any remarks" formControlName="aboutOthers"></textarea>
+                </div>
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                        <mat-label fxFlex="30" style="text-align: right">REMARKS</mat-label>
+                        <textarea fxFlex="60" matInput placeholder="Enter If any remarks" formControlName="remarks"></textarea>
+                        <mat-error *ngIf="errorHandling('remarks', 'required')">
+                            You must provide Discussions details
+                        </mat-error>
+                </div>
+                <div fxFlex="99" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="center center">
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary"
+                        type="submit">Save</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary"
+                        type="submit">Update</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+                </div>
+            </form>
+            <br>
+        </div>
+    </div>
+</div>

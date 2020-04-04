@@ -28,6 +28,8 @@ import { YouthmeetingsComponent } from './admin/youthmeetings/youthmeetings.comp
 import { AutoCompleteDialogComponent }  from './admin/auto-complete-dialog/auto-complete-dialog.component';
 import { LottieAnimationViewModule } from 'ng-lottie';
 import { SkillBoxComponent } from './admin/dialog/skill-box/skill-box.component';
+import { ActivityComponent } from './admin/activity/activity.component';
+import { NameBoxComponent } from './admin/dialog/name-box/name-box.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { SkillBoxComponent } from './admin/dialog/skill-box/skill-box.component'
     InstructionsComponent,
     YouthmeetingsComponent,
     AutoCompleteDialogComponent,
-    SkillBoxComponent
+    SkillBoxComponent,
+    ActivityComponent,
+    NameBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +81,7 @@ import { SkillBoxComponent } from './admin/dialog/skill-box/skill-box.component'
     FlexLayoutModule,
     MatDialogModule
   ],
-  entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent],
+  entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent, NameBoxComponent],
   providers: [ MatDatepickerModule ],
   bootstrap: [AppComponent]
 })

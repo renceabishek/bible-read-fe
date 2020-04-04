@@ -1,0 +1,104 @@
+<div fxLayout="row" fxLayout.xs="column">
+    <div class="card" fxFlex="100">
+        <h5 class="card-header responsive-font-header">Youth Activity Details</h5>
+        <div class="card-body">
+            <form [formGroup]="activityForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
+                fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
+                fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
+                
+                <div fxFlex="66" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-form-field fxFlex="90" class="example-full-width">
+                        <mat-label>TITLE</mat-label>
+                        <input matInput placeholder="Enter the Event Title" formControlName="title">
+                        <mat-error *ngIf="errorHandling('title', 'required')">
+                            You must provide a Event Title
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+               <div fxFlex="33">
+                    <mat-form-field>
+                        <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Date of Event">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="errorHandling('date', 'required')">
+                            Date of Meeting is required
+                        </mat-error>
+                    </mat-form-field>
+                </div> 
+
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">Participated By</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let participants of selectedParticipationsNames; let i = index">
+                            <span>{{participants}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'participants')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('participants')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">Organized By</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let organizers of selectedOrganizersNames; let i = index">
+                            <span>{{organizers}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'organizers')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('organizers')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">Helped By</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <span *ngFor="let helpers of selectedHelpersNames; let i = index">
+                            <span>{{helpers}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'helpers')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </span>
+                        </span>
+                    </div>
+                    <button fxFlex mat-mini-fab (click)="onSelectName('helpers')">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div fxFlex="99" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-form-field fxFlex="100">
+                        <mat-label>Content</mat-label>
+                        <textarea matInput placeholder="Enter the content of the Event" formControlName="content"></textarea>
+                        <mat-error *ngIf="errorHandling('content', 'required')">
+                            You must provide Event/Activity details
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+                <div fxFlex="99" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="center center">
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary"
+                        type="submit">Save</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary"
+                        type="submit">Update</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+                </div>
+            </form>
+            <br>
+        </div>
+    </div>
+</div>
