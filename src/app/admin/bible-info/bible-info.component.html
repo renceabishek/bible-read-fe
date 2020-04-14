@@ -6,7 +6,7 @@
                 fxLayoutAlign.xs="start stretch" fxLayout.sm="column" fxLayoutAlign.sm="start stretch"
                 fxLayoutGap="4px grid" (ngSubmit)="onSave()">
                 <div fxFlex="40" fxShow="true" fxHide.lt-md="true">
-                    <input type="text" formControlName="name" class="form-control" [matAutocomplete]="autoname"
+                    <input type="text"  formControlName="name" class="form-control" [matAutocomplete]="autoname"
                         placeholder="Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
 
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">

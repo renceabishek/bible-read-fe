@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.2.5",
     "@angular/router": "~8.2.5",
     "@ng-bootstrap/ng-bootstrap": "^5.3.0",
+    "@syncfusion/ej2-angular-richtexteditor": "^18.1.43",
     "ag-grid-angular": "^22.1.1",
     "ag-grid-community": "^22.1.1",
     "bootstrap": "^4.4.1",

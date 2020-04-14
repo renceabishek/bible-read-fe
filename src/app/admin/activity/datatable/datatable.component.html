@@ -1,0 +1,23 @@
+<div class="card-body responsive-font">
+    <div fxLayout="row" fxLayoutGap="2px">
+        <div fxFlex=" 40">
+            Title
+        </div>
+        <div fxFlex=" 20">
+            Date
+        </div>
+        <div fxFlex=" 40">
+            Organized By
+        </div>
+    </div>
+</div>
+<div class="card-body responsive-font">
+    <div class="overflowBar">
+        <div id="datatable_div" *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px"
+            style="cursor: pointer;" (click)="selectRow(element)" class="check">
+            <div fxFlex="40">{{element.title}}</div>
+            <div fxFlex="20">{{element.date}}</div>
+            <div fxFlex="40">{{element.organizedBy}}</div>
+        </div>
+    </div>
+</div>

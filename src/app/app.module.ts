@@ -30,6 +30,8 @@ import { LottieAnimationViewModule } from 'ng-lottie';
 import { SkillBoxComponent } from './admin/dialog/skill-box/skill-box.component';
 import { ActivityComponent } from './admin/activity/activity.component';
 import { NameBoxComponent } from './admin/dialog/name-box/name-box.component';
+import { ActivityDatatableComponent } from './admin/activity/datatable/datatable.component';
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { NameBoxComponent } from './admin/dialog/name-box/name-box.component';
     BiblereadersComponent,
     CarouselComponent,
     DatatableComponent,
+    ActivityDatatableComponent,
     InstructionsComponent,
     YouthmeetingsComponent,
     AutoCompleteDialogComponent,
@@ -79,7 +82,8 @@ import { NameBoxComponent } from './admin/dialog/name-box/name-box.component';
     MatButtonToggleModule,
     MatCheckboxModule,
     FlexLayoutModule,
-    MatDialogModule
+    MatDialogModule,
+    RichTextEditorAllModule
   ],
   entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent, NameBoxComponent],
   providers: [ MatDatepickerModule ],

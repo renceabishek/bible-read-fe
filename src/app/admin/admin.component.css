@@ -1,12 +1,22 @@
 .header-style {
-    background-color: thistle !IMPORTANT;
+    background-color: teal !IMPORTANT;
     /* box-shadow: rgb(136, 136, 136) 0px -4px 43px; */
 }
 
 .active-link {
-    border: 1px solid;
+    /* border: 1px solid; */
+    background: goldenrod;
+    border-radius: 16px;
 }
 
 button {
     outline: none;
+}
+
+a {
+    color: black !IMPORTANT;
+}
+
+li {
+    padding-top: 4px;
 }

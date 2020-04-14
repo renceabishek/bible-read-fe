@@ -5,17 +5,6 @@
             <form [formGroup]="meetingsForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
                 fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
                 fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
-
-                <!-- <div fxFlex="20">
-                    <mat-form-field>
-                        <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Date of Meeting">
-                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1></mat-datepicker>
-                        <mat-error *ngIf="errorHandling('date', 'required')">
-                            Date of Meeting is required
-                        </mat-error>
-                    </mat-form-field>
-                </div> -->
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">M.O.C</mat-label>
                     <div fxFlex="60" class="nameElement">
@@ -28,9 +17,9 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('moc')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('moc')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">ARRANGEMENTS</mat-label>
@@ -44,9 +33,9 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('arrange')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('arrange')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">WORSHIPERS</mat-label>
@@ -60,9 +49,9 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('worshipers')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('worshipers')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">MUSICIANS</mat-label>
@@ -76,11 +65,11 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('musicians')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('musicians')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
-                <div  fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">SINGERS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <span *ngFor="let singers of selectedSingersNames; let i = index">
@@ -92,16 +81,17 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('singers')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('singers')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
-                        <mat-label fxFlex="30" style="text-align: right">SONGS</mat-label>
-                        <textarea fxFlex="60" matInput placeholder="Enter the List of songs" formControlName="songs"></textarea>
-                        <mat-error *ngIf="errorHandling('songs', 'required')">
-                            You must provide About details
-                        </mat-error>
+                    <mat-label fxFlex="30" style="text-align: right">SONGS</mat-label>
+                    <textarea fxFlex="60" matInput placeholder="Enter the List of songs"
+                        formControlName="songs"></textarea>
+                    <mat-error *ngIf="errorHandling('songs', 'required')">
+                        You must provide About details
+                    </mat-error>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">TESTIMONY</mat-label>
@@ -115,11 +105,11 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('testimony')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('testimony')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
-                <div  fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">WORD OF GOD</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <span *ngFor="let wog of selectedWogNames; let i = index">
@@ -131,16 +121,17 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('wog')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('wog')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
-                        <mat-label fxFlex="30" style="text-align: right">ABOUT</mat-label>
-                        <textarea fxFlex="60" matInput placeholder="Enter what was discussed" formControlName="aboutWog"></textarea>
-                        <mat-error *ngIf="errorHandling('aboutWog', 'required')">
-                            You must provide Discussions details
-                        </mat-error>
+                    <mat-label fxFlex="30" style="text-align: right">ABOUT</mat-label>
+                    <textarea fxFlex="60" matInput placeholder="Enter what was discussed"
+                        formControlName="aboutWog"></textarea>
+                    <mat-error *ngIf="errorHandling('aboutWog', 'required')">
+                        You must provide Discussions details
+                    </mat-error>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">OTHERS</mat-label>
@@ -154,28 +145,42 @@
                             </span>
                         </span>
                     </div>
-                    <button fxFlex mat-mini-fab (click)="onSelectName('others')">
+                    <a fxFlex mat-mini-fab (click)="onSelectName('others')">
                         <mat-icon>add</mat-icon>
-                    </button>
+                    </a>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">ABOUT</mat-label>
-                    <textarea fxFlex="60" matInput placeholder="Enter If any remarks" formControlName="aboutOthers"></textarea>
+                    <textarea fxFlex="60" matInput placeholder="Enter If any remarks"
+                        formControlName="aboutOthers"></textarea>
                 </div>
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
-                        <mat-label fxFlex="30" style="text-align: right">REMARKS</mat-label>
-                        <textarea fxFlex="60" matInput placeholder="Enter If any remarks" formControlName="remarks"></textarea>
-                        <mat-error *ngIf="errorHandling('remarks', 'required')">
-                            You must provide Discussions details
+                    <mat-label fxFlex="30" style="text-align: right">REMARKS</mat-label>
+                    <textarea fxFlex="60" matInput placeholder="Enter If any remarks"
+                        formControlName="remarks"></textarea>
+                    <mat-error *ngIf="errorHandling('remarks', 'required')">
+                        You must provide Discussions details
+                    </mat-error>
+                </div>
+                <div fxFlex="33">
+                    <mat-label fxFlex="30" style="text-align: right"></mat-label>
+                    <mat-form-field>
+                        <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Date of Meeting">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="errorHandling('date', 'required')">
+                            Date of Meeting is required
                         </mat-error>
+                    </mat-form-field>
                 </div>
                 <div fxFlex="99" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="center center">
-                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary"
-                        type="submit">Save</button>
-                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary"
-                        type="submit">Update</button>
-                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</button>
-                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}}
+                        class="btn btn-primary" type="submit">Save</button>
+                    <button fxFlex="10" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}}
+                        class="btn btn-primary" type="submit">Update</button>
+                    <a fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</a>
+                    <a fxFlex="10" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger"
+                        (click)="onDeleteRows()">Delete</a>
                 </div>
             </form>
             <br>
