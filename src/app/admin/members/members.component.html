@@ -1,4 +1,4 @@
-<div class="card m-3">
+<div class="card m-3 box">
     <div class="card-header" fxLayout="row" fxLayoutAlign="start center">
         <h5 fxFlex="60">Add/Modify Youth Members detail</h5>
         <div fxFlex fxShow="true" fxHide.lt-md="true">
@@ -48,7 +48,7 @@
 
 
             <div fxFlex="20">
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>NAME</mat-label>
                     <input matInput placeholder="Enter the name" formControlName="name">
                     <mat-error *ngIf="errorHandling('name', 'required')">
@@ -63,7 +63,7 @@
                 </div> -->
             </div>
             <div fxFlex="20">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                     <input formControlName="dob" matInput [matDatepicker]="picker1" placeholder="Enter D.O.B">
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
@@ -106,7 +106,7 @@
                 </span>
             </div>
             <div fxFlex="60">
-                <mat-form-field fxFlex="100">
+                <mat-form-field fxFlex="100" appearance="outline">
                     <mat-label>About</mat-label>
                     <textarea matInput placeholder="About the Person" formControlName="about"></textarea>
                     <mat-error *ngIf="errorHandling('about', 'required')">

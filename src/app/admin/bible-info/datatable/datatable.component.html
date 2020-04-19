@@ -19,8 +19,8 @@
 </div>
 <div class="responsive-font">
     <div class="overflowBar">
-        <div id="datatable_div" *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px" style="cursor: pointer;"
-            (click)="selectRow(element)" class="check">
+        <div id="datatable_div" *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px" 
+                style="cursor: pointer;" (click)="selectRow(element)" class="check">
             <div fxFlex=" 40"><span class="responsive-font-header" style="color: green">{{element.name}}</span>
                 <span class="responsive-font-smaller">({{element.date}})</span>
             </div>

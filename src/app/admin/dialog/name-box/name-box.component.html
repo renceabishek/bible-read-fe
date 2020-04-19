@@ -1,5 +1,10 @@
-<p>select the Name</p>
+<p style="text-align: center">SELECT NAME(S)</p>
 <div style="height: 80%;overflow-x: hidden">
+    <mat-form-field>
+        <mat-label>Filter names</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+      </mat-form-field>
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <!-- Checkbox Column -->
@@ -30,7 +35,7 @@
         </tr>
     </table>
 </div>
-<div>
+<div fxLayout="row" fxLayoutGap="4px" fxLayoutAlign="center center">
     <button class="btn btn-primary mr-1" [mat-dialog-close]="selection.selected" cdkFocusInitial>Ok</button>
     <button class="btn btn-secondary" (click)="onNoClick()">Close</button>
 </div>

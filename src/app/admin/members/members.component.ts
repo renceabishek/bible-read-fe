@@ -212,6 +212,7 @@ export class YouthMembersComponent implements OnInit {
 
   handleReaderLoaded(e) {
     this.avatarBackGround = e.target.result;
+    console.log("files "+e.target.result)
     //this.base64textString.push('data:image/png;base64,' + btoa(e.target.result));
   }
 

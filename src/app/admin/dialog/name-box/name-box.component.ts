@@ -50,6 +50,11 @@ export class NameBoxComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
 
 export interface DialogDataName {

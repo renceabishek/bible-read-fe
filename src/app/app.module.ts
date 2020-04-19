@@ -32,6 +32,9 @@ import { ActivityComponent } from './admin/activity/activity.component';
 import { NameBoxComponent } from './admin/dialog/name-box/name-box.component';
 import { ActivityDatatableComponent } from './admin/activity/datatable/datatable.component';
 import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { MeetingDatatableComponent } from './admin/youthmeetings/datatable/datatable.component';
+import { SpinnerComponent } from './admin/spinner/spinner.component';
+import { SpinnerOverlayComponent } from './admin/spinner-overlay/spinner-overlay.component';
 
 @NgModule({
   declarations: [
@@ -49,12 +52,15 @@ import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor'
     CarouselComponent,
     DatatableComponent,
     ActivityDatatableComponent,
+    MeetingDatatableComponent,
     InstructionsComponent,
     YouthmeetingsComponent,
     AutoCompleteDialogComponent,
     SkillBoxComponent,
     ActivityComponent,
-    NameBoxComponent
+    NameBoxComponent,
+    SpinnerComponent,
+    SpinnerOverlayComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +91,7 @@ import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor'
     MatDialogModule,
     RichTextEditorAllModule
   ],
-  entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent, NameBoxComponent],
+  entryComponents: [AutoCompleteDialogComponent, SkillBoxComponent, NameBoxComponent, SpinnerOverlayComponent],
   providers: [ MatDatepickerModule ],
   bootstrap: [AppComponent]
 })

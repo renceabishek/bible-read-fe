@@ -64,18 +64,6 @@ export class ActivityComponent implements OnInit {
     return this.activityForm.controls[control].hasError(error);
   }
 
-  customValidation(): boolean {
-    if(this.selectedOrganizersNames.length<=0) {
-      alert("Select Organized By")
-      return true;
-    } else if(this.selectedParticipationsNames.length<=0) {
-      alert("Select Participated By")
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   additionalFormValidation() {
     if(this.selectedOrganizersNames.length<=0 || this.selectedParticipationsNames.length<=0) {
       return true;
@@ -95,10 +83,6 @@ export class ActivityComponent implements OnInit {
       this.crudFlag="";
       return
     }
-
-     if(this.customValidation()) {
-       return  
-     }
 
      console.log('checking contnt '+this.activityForm.get('content').value)
 

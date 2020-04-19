@@ -6,13 +6,13 @@ import { DailyData } from '../model/DailyData';
 import { ProfileGet } from '../model/ProfilesGet';
 import { tap, catchError } from 'rxjs/operators';
 import { Activity } from '../model/Activity';
+import { Meeting } from '../model/Meeting';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 let header = new HttpHeaders();
-header.append('Content-Type', 'multipart/form-data');
 header.set('Accept', 'application/json');
 const options = { headers: header };
 
@@ -99,4 +99,60 @@ export class AdminService {
   public deleteActivityInfo(uniqueId): Observable<any> {
     return this.http.delete<any>('/admin/activity/' + uniqueId);
   }
+
+  // Meeting CRUD
+
+  public viewMeetingInfo(): Observable<Meeting[]> {
+    return this.http.get<Meeting[]>('/admin/meeting/all');
+  }
+
+  public createMeeting(meeting, files): Observable<any> {
+
+    let formdata = new FormData();
+    const blobOverrides = new Blob([JSON.stringify(meeting)], {
+      type: 'application/json',
+    });
+
+    formdata.append('meeting', blobOverrides);
+    files.forEach(file => {
+      formdata.append('files', file);
+    });
+    
+
+
+    return this.http.post('/admin/meeting', formdata, { responseType: 'text' })
+  }
+
+  public updateMeeting(meeting, files, uniqueId, deletedPicsUrl): Observable<any> {
+
+    let formdata = new FormData();
+    const blobOverrides = new Blob([JSON.stringify(meeting)], {
+      type: 'application/json',
+    });
+
+    const blobPicsOverrides = new Blob([JSON.stringify(deletedPicsUrl)], {
+      type: 'application/json',
+    });
+
+    formdata.append('meeting', blobOverrides);
+    formdata.append('deletedPicsUrl', blobPicsOverrides);
+    files.forEach(file => {
+      formdata.append('files', file);
+    });
+
+    return this.http.patch('/admin/meeting/' + uniqueId, formdata, { responseType: 'text' });
+  }
+
+  public deleteMeeting(uniqueId, pics): Observable<any> {
+    console.log("pics "+JSON.stringify(pics))
+
+     
+      const httpOptions = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        body: pics
+      };
+
+    return this.http.delete<any>('/admin/meeting/' + uniqueId,httpOptions);
+  }
+
 }
