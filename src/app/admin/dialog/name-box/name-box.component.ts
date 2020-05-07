@@ -18,7 +18,6 @@ export class NameBoxComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<NameBoxComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataName) {
-      console.log("element values "+this.ELEMENT_DATA)
      }
 
   ngOnInit() {
@@ -47,6 +46,7 @@ export class NameBoxComponent implements OnInit {
   }
 
 
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -59,6 +59,7 @@ export class NameBoxComponent implements OnInit {
 
 export interface DialogDataName {
   name: any;
+  selectedNames: string[]
 }
 
 export interface PeriodicElementName {

@@ -13,7 +13,7 @@ export class SpinnerOverlayServiceService {
 
   constructor(private overlay: Overlay) {}
 
-  public show(message = '') {
+  public show(message = 'loading') {
     // Returns an OverlayRef (which is a PortalHost)
 
     if (!this.overlayRef) {

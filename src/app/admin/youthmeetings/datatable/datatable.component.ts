@@ -1,8 +1,7 @@
-import { Component, OnInit, Inject, EventEmitter, ViewChild, Output } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, ViewChild, Output, Input } from '@angular/core';
 import { Meeting } from 'src/app/model/Meeting';
 import { AdminService } from 'src/app/service/admin.service';
 import { DOCUMENT } from '@angular/common';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-meetingdatatable',
@@ -11,62 +10,70 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 })
 export class MeetingDatatableComponent implements OnInit { 
 
-  ELEMENT_DATA: Meeting[];
-  dataSource = new MatTableDataSource<Meeting>(this.ELEMENT_DATA);
+  MEETING_DATA: Meeting[];
+  Temp_MEETING_DATA: Meeting[];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @Output() rowValueMeeting: EventEmitter<Meeting> =   new EventEmitter();
 
-  @Output() rowValue: EventEmitter<Meeting> =   new EventEmitter();
-
-  constructor(private adminService: AdminService,  @Inject(DOCUMENT) private document: Document) { }
+  constructor(private adminService: AdminService) { 
+    console.log("constructor calling")
+  }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
     this.adminService.viewMeetingInfo().subscribe(data=>{
-      this.ELEMENT_DATA = data;
-      this.dataSource = new MatTableDataSource<Meeting>(this.ELEMENT_DATA);
+      console.log("on init calling "+data[0].uniqueId)
+      this.MEETING_DATA = data;
+      this.Temp_MEETING_DATA = data;
     })
   }
 
-  selectRow(row) {
-    console.log("row values emit "+row.others)
-    this.rowValue.emit(row);
+  selectRow(row: Meeting) {
+    //this.rowValueMeeting = new EventEmitter();
+    console.log("this unique id "+row.uniqueId)
+    console.log("temp uniqu "+this.Temp_MEETING_DATA[0].uniqueId)
+    for(let i=0;i<this.Temp_MEETING_DATA.length;i++) {
+      if(row.uniqueId==this.Temp_MEETING_DATA[i].uniqueId) {
+       return this.rowValueMeeting.emit(this.Temp_MEETING_DATA[i]);
+      }
+    }
+    
   }
 
   UpdateRowValues(meeting, uniqueId) {
-    for(let i=0;i< this.ELEMENT_DATA.length;i++){
-      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
-        this.ELEMENT_DATA[i].date = meeting.date;
-        this.ELEMENT_DATA[i].moc = meeting.moc;
-        this.ELEMENT_DATA[i].arrangements = meeting.arrangements;
-        this.ELEMENT_DATA[i].worshipers = meeting.worshipers;
-        this.ELEMENT_DATA[i].musicians = meeting.musicians;
-        this.ELEMENT_DATA[i].singers = meeting.singers
-        this.ELEMENT_DATA[i].songs = meeting.songs
-        this.ELEMENT_DATA[i].testimony = meeting.testimony
-        this.ELEMENT_DATA[i].wog = meeting.wog
-        this.ELEMENT_DATA[i].aboutWog = meeting.aboutWog
-        this.ELEMENT_DATA[i].others = meeting.others
-        this.ELEMENT_DATA[i].othersAbout = meeting.othersAbout
-        this.ELEMENT_DATA[i].remarks = meeting.remarks
-        this.ELEMENT_DATA[i].picsUrl = meeting.picsUrl
-        this.ELEMENT_DATA[i].picsModel = meeting.picsModel
+    console.log("getting updated")
+    for(let i=0;i< this.MEETING_DATA.length;i++){
+      if(this.MEETING_DATA[i].uniqueId==uniqueId) {
+        this.MEETING_DATA[i].date = meeting.date;
+        this.MEETING_DATA[i].moc = meeting.moc;
+        this.MEETING_DATA[i].arrangements = meeting.arrangements;
+        this.MEETING_DATA[i].worshipers = meeting.worshipers;
+        this.MEETING_DATA[i].musicians = meeting.musicians;
+        this.MEETING_DATA[i].singers = meeting.singers
+        this.MEETING_DATA[i].songs = meeting.songs
+        this.MEETING_DATA[i].testimony = meeting.testimony
+        this.MEETING_DATA[i].wog = meeting.wog
+        this.MEETING_DATA[i].aboutWog = meeting.aboutWog
+        this.MEETING_DATA[i].others = meeting.others
+        this.MEETING_DATA[i].othersAbout = meeting.othersAbout
+        this.MEETING_DATA[i].remarks = meeting.remarks
+        this.MEETING_DATA[i].picsUrl = meeting.picsUrl
+        this.MEETING_DATA[i].picsModel = meeting.picsModel
       }
     }
     
   }
 
   saveRowValues(meeting) {
-    if(this.ELEMENT_DATA==null) {
-      this.ELEMENT_DATA=[];
+    if(this.MEETING_DATA==null) {
+      this.MEETING_DATA=[];
     }
-    this.ELEMENT_DATA.push(meeting);
+    this.MEETING_DATA.push(meeting);
   }
 
   deleteRowValues(uniqueId) {
-    for(let i=0;i< this.ELEMENT_DATA.length;i++){
-      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
-        this.ELEMENT_DATA.splice(i,1)
+    for(let i=0;i< this.MEETING_DATA.length;i++){
+      if(this.MEETING_DATA[i].uniqueId==uniqueId) {
+        this.MEETING_DATA.splice(i,1)
         return;
       }
     }
@@ -75,9 +82,10 @@ export class MeetingDatatableComponent implements OnInit {
 
 
   getListOfPicsUrl(uniqueId) {
-    for(let i=0;i< this.ELEMENT_DATA.length;i++){
-      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
-        return this.ELEMENT_DATA[i].picsUrl;
+    console.log("getting pics")
+    for(let i=0;i< this.MEETING_DATA.length;i++){
+      if(this.MEETING_DATA[i].uniqueId==uniqueId) {
+        return this.MEETING_DATA[i].picsUrl;
       }
     }
   }

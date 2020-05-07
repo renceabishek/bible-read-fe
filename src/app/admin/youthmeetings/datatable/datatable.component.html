@@ -16,7 +16,7 @@
 </div>
 <div class="card-body responsive-font">
     <div class="overflowBar">
-        <div id="datatable_div" *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px" 
+        <div id="datatable_meeting" *ngFor="let element of MEETING_DATA" fxLayout="row" fxLayoutGap="2px" 
                 style="cursor: pointer;" (click)="selectRow(element)" class="check">
             <div fxFlex="10">1</div>
             <div fxFlex="20">{{element.date}}</div>

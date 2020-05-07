@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NameBoxComponent } from '../dialog/name-box/name-box.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBarConfig } from '@angular/material';
 import { AdminService } from 'src/app/service/admin.service';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormGroupDirective } from '@angular/forms';
 import { formatDate } from '@angular/common';
@@ -34,20 +34,27 @@ export class YouthmeetingsComponent implements OnInit {
   fileName: string;
   deletedPicsUrl=[];
 
+  actionButtonLabel: string = 'Ok';
+  action: boolean = true;
+  setAutoHide: boolean = true;
+  autoHide: number = 3000;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
   @ViewChild(MeetingDatatableComponent, { static: true }) child: MeetingDatatableComponent;
   @ViewChild(FormGroupDirective, { static: true }) form: FormGroupDirective
 
   constructor(public dialog: MatDialog, private adminService: AdminService, private formBuilder: FormBuilder,
-    private spinnerService: SpinnerOverlayServiceService) { }
+    private spinnerService: SpinnerOverlayServiceService, public snackBar: MatSnackBar) { }
 
   
   ngOnInit() {
     this.meetingsForm = this.formBuilder.group({
       date: ['', Validators.required],
-      aboutOthers: ['', [this.checkIfAboutAvailable()]],
-      songs: ['', [this.checkIfSongsAvailable()]],
-      aboutWog: ['', [this.checkIfWogAvailable()]],
-      remarks:['']
+      aboutOthers: ['', [this.checkIfAboutAvailable(), Validators.maxLength(200)]],
+      songs: ['', [this.checkIfSongsAvailable(), Validators.maxLength(200)]],
+      aboutWog: ['', [this.checkIfWogAvailable(), Validators.maxLength(200)]],
+      remarks:['', Validators.maxLength(200)]
     });
 
     this.adminService.getProfiles().subscribe(data => {
@@ -146,6 +153,7 @@ export class YouthmeetingsComponent implements OnInit {
       this.child.saveRowValues(meeting)
       this.onReset();
       this.spinnerService.hide();
+      this.successSnackBar("Details Saved Succesfully !");
     })
 
   }
@@ -172,6 +180,7 @@ export class YouthmeetingsComponent implements OnInit {
         this.child.UpdateRowValues(meeting, this.uniqueId)
         this.onReset();
         this.spinnerService.hide();
+        this.successSnackBar("Details updated Succesfully !");
       })
   }
 
@@ -204,14 +213,18 @@ export class YouthmeetingsComponent implements OnInit {
     this.spinnerService.show();
      let picsToBeDeleted = this.child.getListOfPicsUrl(this.uniqueId);
      let picstoBedelete: string[] = [];
-     picsToBeDeleted.forEach(url=>{
-      picstoBedelete.push(url);
-     })
+     if(picsToBeDeleted!=null) {
+      picsToBeDeleted.forEach(url=>{
+        picstoBedelete.push(url);
+       })
+     }
+     
       this.adminService.deleteMeeting(this.uniqueId, picstoBedelete)
         .subscribe(data => {
           this.child.deleteRowValues(this.uniqueId)
           this.onReset();
           this.spinnerService.hide();
+          this.successSnackBar("Details deleted Succesfully !");
         })
     }
   }
@@ -234,6 +247,9 @@ export class YouthmeetingsComponent implements OnInit {
   }
 
   onPicsSelect(evt: any): void {
+    if(this.selectedPicsNames.length >=3){
+      return 
+    }
     const file = evt.target.files[0];
 
     if (file) {
@@ -254,7 +270,7 @@ export class YouthmeetingsComponent implements OnInit {
   onSelectName(tag): void {
     
     const dialogRef = this.dialog.open(NameBoxComponent, {
-      width: "251px",
+      width: "300px",
       height: "500px",
       data: { name: this.dialogNames },
       panelClass: 'custom-modalbox'
@@ -262,10 +278,12 @@ export class YouthmeetingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed ' + result);
+      if(result!=null) {
       result.forEach(element => {
         this.addToOrRemoveFromSelectedList('add', tag, element.name);
         
       });
+    }
     });
   }
 
@@ -277,24 +295,40 @@ export class YouthmeetingsComponent implements OnInit {
   addToOrRemoveFromSelectedList(flag, tag, name): void {
     if (flag == "add") {
       if (tag == "moc") {
-        this.selectedMocNames.push(name);
+        if(!this.selectedMocNames.includes(name)){
+          this.selectedMocNames.push(name);
+        }        
       } else if (tag == "musicians") {
-        this.selectedMusiciansNames.push(name);
+        if(!this.selectedMusiciansNames.includes(name)){
+          this.selectedMusiciansNames.push(name);
+        }        
       } else if (tag == "arrange") {
-        this.selectedArrangeNames.push(name);
+        if(!this.selectedArrangeNames.includes(name)){
+          this.selectedArrangeNames.push(name);
+        }
       } else if (tag == "songs") {
-        this.selectedSingersNames.push(name);
-        this.meetingsForm.get(tag).updateValueAndValidity();
+        if(!this.selectedSingersNames.includes(name)){
+          this.selectedSingersNames.push(name);
+          this.meetingsForm.get(tag).updateValueAndValidity();
+        }                
       } else if (tag == "worshipers") {
-        this.selectedWorshipersNames.push(name);
+        if(!this.selectedWorshipersNames.includes(name)){
+          this.selectedWorshipersNames.push(name);
+        }
       } else if (tag == "testimony") {
-        this.selectedTestimonyNames.push(name);
+        if(!this.selectedTestimonyNames.includes(name)){
+          this.selectedTestimonyNames.push(name);
+        }
       } else if (tag == "aboutWog") {
-        this.selectedWogNames.push(name);
-        this.meetingsForm.get(tag).updateValueAndValidity();
+        if(!this.selectedWogNames.includes(name)){
+          this.selectedWogNames.push(name);
+          this.meetingsForm.get(tag).updateValueAndValidity();
+        }       
       } else if (tag == "aboutOthers") {
-        this.selectedOthersNames.push(name);
-        this.meetingsForm.get(tag).updateValueAndValidity();
+        if(!this.selectedOthersNames.includes(name)){
+          this.selectedOthersNames.push(name);
+          this.meetingsForm.get(tag).updateValueAndValidity();
+        }        
       } else if (tag == "pics") {
         this.selectedPicsNames.push(name);
       }
@@ -330,17 +364,32 @@ export class YouthmeetingsComponent implements OnInit {
   selectRowValue(meeting: Meeting) {
     this.clearFields();
     this.meetingsForm.controls.date.setValue(formatDate(meeting.date, 'yyyy-MM-dd', 'en'));
-    this.selectedMocNames = meeting.moc;
-    this.selectedArrangeNames = meeting.arrangements
-    this.selectedWorshipersNames = meeting.worshipers
-    this.selectedMusiciansNames = meeting.musicians
-    this.selectedSingersNames = meeting.singers
+    if(this.isArrayNotEmpty(meeting.moc)) {
+      meeting.moc.forEach(moc=>this.selectedMocNames.push(moc));
+    }
+    if(this.isArrayNotEmpty(meeting.arrangements)) {
+      meeting.arrangements.forEach(arrangements=>this.selectedArrangeNames.push(arrangements));
+    }    
+    if(this.isArrayNotEmpty(meeting.worshipers)) {
+      meeting.worshipers.forEach(worshipers=>this.selectedWorshipersNames.push(worshipers));
+    }
+    if(this.isArrayNotEmpty(meeting.musicians)) {
+      meeting.musicians.forEach(musicians=>this.selectedMusiciansNames.push(musicians));
+    }
+    if(this.isArrayNotEmpty(meeting.singers)) {
+      meeting.singers.forEach(singers=>this.selectedSingersNames.push(singers));
+    }    
     this.meetingsForm.controls.songs.setValue(meeting.songs)
-    this.selectedTestimonyNames = meeting.testimony
-    this.selectedWogNames = meeting.wog
-    console.log("checking "+meeting.wog)
+    if(this.isArrayNotEmpty(meeting.testimony)) {
+      meeting.testimony.forEach(testimony=>this.selectedTestimonyNames.push(testimony));
+    }
+    if(this.isArrayNotEmpty(meeting.wog)) {
+      meeting.wog.forEach(wog=>this.selectedWogNames.push(wog));
+    }
     this.meetingsForm.controls.aboutWog.setValue(meeting.aboutWog)
-    this.selectedOthersNames = meeting.others
+    if(this.isArrayNotEmpty(meeting.others)) {
+      meeting.others.forEach(others=>this.selectedOthersNames.push(others));
+    }
     this.meetingsForm.controls.aboutOthers.setValue(meeting.othersAbout)
     this.meetingsForm.controls.remarks.setValue(meeting.remarks)
     if(meeting.picsUrl!=null) {
@@ -362,7 +411,26 @@ export class YouthmeetingsComponent implements OnInit {
     this.uniqueId = meeting.uniqueId;
   }
 
+  isArrayNotEmpty(value: any): boolean {
+    if(value!=null && value.length>0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  successSnackBar(message: string) {
+    let config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = this.setAutoHide ? this.autoHide : 0;
+    config.panelClass = ['success-snapbar']
+    this.snackBar.open(message, this.action ? this.actionButtonLabel : undefined, config);
+  }
+
 }
+
+
 
 export class NameModel {
   name: string

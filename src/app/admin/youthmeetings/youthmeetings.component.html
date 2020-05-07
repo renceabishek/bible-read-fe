@@ -140,8 +140,8 @@
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">OTHERS</mat-label>
                     <div fxFlex="60" class="nameElement">
-                        <tr *ngFor="let others of selectedOthersNames; let i = index">
-                            <td>{{others}}
+                        <tr *ngFor="let aboutOthers of selectedOthersNames; let i = index">
+                            <td>{{aboutOthers}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'aboutOthers')">
                                     <mat-icon>close</mat-icon>
@@ -194,10 +194,13 @@
                     </div>
                     <div fxFlex class="upload-btn-wrapper">
                         <a mat-mini-fab style="width: 32px;">
-                            <mat-icon>attach_file</mat-icon>
+                            <mat-icon style="cursor: pointer">attach_file</mat-icon>
                         </a>
-                        <input type="file" name="myfile" (change)="onPicsSelect($event)" accept=".png, .jpg, .jpeg" />
+                        <input type="file" name="myfile"
+                         (change)="onPicsSelect($event)" accept=".png, .jpg, .jpeg" />
                     </div>
+                    <div fxFlex style="padding-left: 136px; font-size: 12px;">
+                        Maximum 3 pics allowed (png,jpg,jpeg)</div>
                 </div>
                 <div fxFlex="33">
                     <mat-label fxFlex="30" style="text-align: right"></mat-label>
@@ -225,7 +228,7 @@
     </div>
     <div style="margin-top: -43px;"> 
         <div class="card-body">
-            <app-meetingdatatable  (rowValue)="selectRowValue($event)"></app-meetingdatatable>
+            <app-meetingdatatable  (rowValueMeeting)="selectRowValue($event)"></app-meetingdatatable>
         </div>
     </div>
 </div>

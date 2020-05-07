@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm, FormGroupDirective } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { AdminService } from 'src/app/service/admin.service';
 import { NameModel } from '../youthmeetings/youthmeetings.component';
 import { NameBoxComponent } from '../dialog/name-box/name-box.component';
 import { formatDate } from '@angular/common';
 import { Activity } from 'src/app/model/Activity';
 import { ActivityDatatableComponent } from './datatable/datatable.component';
+import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.service';
 
 @Component({
   selector: 'app-activity',
@@ -20,6 +21,8 @@ export class ActivityComponent implements OnInit {
   selectedOrganizersNames = [];
   selectedParticipationsNames = [];
   selectedHelpersNames = [];
+  selectedPicsNames: picsModel[] = [];
+  deletedPicsUrl=[];
   saveUP = false;
   uniqueId="";
   crudFlag="";
@@ -31,13 +34,23 @@ export class ActivityComponent implements OnInit {
            'LowerCase', 'UpperCase', '|', 'Undo', 'Redo', '|',
            'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
            'Indent', 'Outdent', '|', 'CreateLink','CreateTable',
-           'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen']
+           '|', 'ClearFormat', 'Print', 'SourceCode']
    };
+   // , '|', 'FullScreen'            'Image',
 
+   actionButtonLabel: string = 'Ok';
+   action: boolean = true;
+   setAutoHide: boolean = true;
+   autoHide: number = 3000;
+   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+   verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+   
   @ViewChild(ActivityDatatableComponent, { static: true }) child: ActivityDatatableComponent;
   @ViewChild(FormGroupDirective, { static: true }) form: FormGroupDirective
 
-  constructor(public dialog: MatDialog, private adminService: AdminService, private formBuilder: FormBuilder) { }
+  constructor(public dialog: MatDialog, private adminService: AdminService, private formBuilder: FormBuilder,
+    private spinnerService: SpinnerOverlayServiceService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.activityForm = this.formBuilder.group({
@@ -47,6 +60,12 @@ export class ActivityComponent implements OnInit {
     });
 
     this.adminService.getProfiles().subscribe(data => {
+      
+      let value: NameModel = {
+        name: "All"
+      }
+      this.allNames.push(value)
+
       data.forEach(f => {
         let value: NameModel = {
           name: f.name
@@ -71,6 +90,26 @@ export class ActivityComponent implements OnInit {
     return false;
   }
 
+  onOpenClick(index) {
+    window.open(this.selectedPicsNames[index].url)
+  }
+
+  onPicsSelect(evt: any): void {
+    if(this.selectedPicsNames.length >=3){
+      return 
+    }
+    const file = evt.target.files[0];
+
+    if (file) {
+      let picsModel : picsModel= {
+        name: file.name,
+        url: URL.createObjectURL(file),
+        file: file
+      }
+      this.addToOrRemoveFromSelectedList('add', 'pics', picsModel);
+    }
+  }
+
   onSave(): void {
 
     if (this.activityForm.invalid) {
@@ -85,7 +124,7 @@ export class ActivityComponent implements OnInit {
     }
 
      console.log('checking contnt '+this.activityForm.get('content').value)
-
+     this.spinnerService.show();
      var activity = <Activity>{
       title: this.activityForm.get('title').value,
       date: formatDate(this.activityForm.controls.date.value, 'yyyy-MM-dd', 'en'),
@@ -94,18 +133,27 @@ export class ActivityComponent implements OnInit {
       organizedBy: this.selectedOrganizersNames,
       participatedBy: this.selectedParticipationsNames
     };
-
+    activity.picsUrl = [];
     if (this.saveUP == true) {
       return this.onUpdate(activity);
     }    
 
-    this.adminService.postActivityInfo(activity).subscribe(data=>{
-        activity.uniqueId = data;
+    let files=[]
+    this.selectedPicsNames.forEach(f=>{
+      files.push(f.file);
+    })
+
+    this.adminService.postActivityInfo(activity, files).subscribe(data=>{
+        let jsonData= JSON.parse(data);
+        activity.uniqueId = jsonData.uniqueId;
+        let listsOfUrl = jsonData.picsUrl
+        listsOfUrl.forEach(url=>{
+         activity.picsUrl.push(url)
+        })
         this.child.saveRowValues(activity);
         this.onReset();
-       //this.form.resetForm();
-
-       
+        this.spinnerService.hide();
+        this.successSnackBar("Details Saved Succesfully !");       
     })
     console.log("save values ")
 
@@ -119,17 +167,30 @@ export class ActivityComponent implements OnInit {
     this.selectedOrganizersNames=[];
     this.selectedParticipationsNames=[];
     this.selectedHelpersNames=[];
+    this.selectedPicsNames=[];
     this.submitted=true;
+    this.deletedPicsUrl=[];
   }
 
   onDeleteRows(): void {
     console.log("delete now")
     this.crudFlag = "delete";
     if (this.uniqueId.length > 0) {
-      this.adminService.deleteActivityInfo(this.uniqueId)
+      this.spinnerService.show();
+      let picsToBeDeleted = this.child.getListOfPicsUrl(this.uniqueId);
+      let picstoBedelete: string[] = [];
+      if(picsToBeDeleted!=null) {
+        picsToBeDeleted.forEach(url=>{
+          picstoBedelete.push(url);
+        })
+      }      
+
+      this.adminService.deleteActivityInfo(this.uniqueId, picstoBedelete)
         .subscribe(data => {
           this.child.deleteRowValues(this.uniqueId)
           this.onReset();
+          this.spinnerService.hide();
+          this.successSnackBar("Details deleted Succesfully !");
         })
     }
   }
@@ -137,29 +198,58 @@ export class ActivityComponent implements OnInit {
   onUpdate(activity): void {
     console.log("update here")
 
-    this.adminService.putActivityInfo(activity, this.uniqueId)
+    let files =[]
+    for(let i=0;i<this.selectedPicsNames.length;i++) {
+      if(this.selectedPicsNames[i].file!= null) {
+        files.push(this.selectedPicsNames[i].file);
+      } else {
+        activity.picsUrl.push(this.selectedPicsNames[i].url)
+      }
+    }
+
+
+    this.adminService.putActivityInfo(activity, files, this.uniqueId, this.deletedPicsUrl)
       .subscribe(data => {
+        if(data!=null && data!=undefined && data!="") {
+          let ListsOfUrl =JSON.parse(data)
+          ListsOfUrl.forEach(url=> {
+            activity.picsUrl.push(url);
+          })
+        }
         this.child.UpdateRowValues(activity, this.uniqueId)
         this.onReset();
+        this.spinnerService.hide();
+        this.successSnackBar("Details Updated Succesfully !")
       })
   }
 
 
   onSelectName(tag): void {
     console.log('on select')
+
     const dialogRef = this.dialog.open(NameBoxComponent, {
       width: "300px",
-      height: "600px",
+      height: "500px",
       data: { name: this.allNames },
       panelClass: 'custom-modalbox'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed ' + result);
-      result.forEach(element => {
-        this.addToOrRemoveFromSelectedList('add', tag, element.name);
-      });
+      if(result!=null) {
+        result.forEach(element => {
+          this.addToOrRemoveFromSelectedList('add', tag, element.name);
+        });
+      }     
     });
+  }
+
+  isArrayAvailable(value: any): boolean {
+    if(value!=null && value.length>0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   clearNames(index, tag): void {
@@ -170,11 +260,19 @@ export class ActivityComponent implements OnInit {
   addToOrRemoveFromSelectedList(flag, tag, name): void {
     if (flag == "add") {
       if (tag == "organizers") {
-        this.selectedOrganizersNames.push(name);
+        if(!this.selectedOrganizersNames.includes(name)) {
+          this.selectedOrganizersNames.push(name);
+        }
       } else if (tag == "helpers") {
-        this.selectedHelpersNames.push(name);
+        if(!this.selectedHelpersNames.includes(name)) {
+          this.selectedHelpersNames.push(name);
+        }        
       } else if (tag == "participants") {
-        this.selectedParticipationsNames.push(name);
+        if(!this.selectedParticipationsNames.includes(name)) {
+          this.selectedParticipationsNames.push(name);
+        }        
+      } else if (tag == "pics") {
+        this.selectedPicsNames.push(name);
       }
     } else if (flag == "remove") {
       if (tag == "organizers") {
@@ -183,18 +281,72 @@ export class ActivityComponent implements OnInit {
         this.selectedHelpersNames.splice(name, 1);
       } else if (tag == "participants") {
         this.selectedParticipationsNames.splice(name, 1);
-      } 
+      } else if (tag == "pics") {
+        if(this.selectedPicsNames[name].file==null) {
+          this.deletedPicsUrl.push(this.selectedPicsNames[name].url)
+        }
+        this.selectedPicsNames.splice(name, 1);
+      }
     }
   }
 
   selectRowValue(activity: Activity) {
+    this.selectedOrganizersNames=[]
+    this.selectedHelpersNames = []
+    this.selectedParticipationsNames = []
     this.activityForm.controls.title.setValue(activity.title);
     this.activityForm.controls.content.setValue(activity.content);
     this.activityForm.controls.date.setValue(formatDate(activity.date, 'yyyy-MM-dd', 'en'));
-    this.selectedHelpersNames = activity.helpedBy;
-    this.selectedOrganizersNames = activity.organizedBy;
-    this.selectedParticipationsNames = activity.participatedBy;
+    if(this.isArrayNotEmpty(activity.helpedBy)) {
+      activity.helpedBy.forEach(help=>this.selectedHelpersNames.push(help))
+    }
+    if(this.isArrayNotEmpty(activity.organizedBy)) {
+      activity.organizedBy.forEach(organize=>this.selectedOrganizersNames.push(organize))
+    }
+    if(this.isArrayNotEmpty(activity.participatedBy)) {
+      activity.participatedBy.forEach(participate=>this.selectedParticipationsNames.push(participate))
+    }
+
+    if(activity.picsUrl!=null) {
+      for(let i=0;i<activity.picsUrl.length;i++) {
+        const name = activity.picsUrl[i].split('%2F')[2].split('?')[0].replace('%20',' ')
+        let picsModel = <picsModel> {
+          name: name,
+          url: activity.picsUrl[i]
+        }
+        this.selectedPicsNames.push(picsModel)
+      }
+     } 
+     else {
+      this.selectedPicsNames=[];
+    }
+
     this.saveUP = true;
     this.uniqueId = activity.uniqueId;
   }
+
+  isArrayNotEmpty(value: any):boolean {
+    if(value!=null && value.length>0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
+  successSnackBar(message: string) {
+    let config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = this.setAutoHide ? this.autoHide : 0;
+    config.panelClass = ['success-snapbar']
+    this.snackBar.open(message, this.action ? this.actionButtonLabel : undefined, config);
+  }
+}
+
+export class picsModel {
+  name: string
+  url: string
+  file: any
 }

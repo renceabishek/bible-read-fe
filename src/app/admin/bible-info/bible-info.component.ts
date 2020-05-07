@@ -169,7 +169,7 @@ export class BibleInfoComponent implements OnInit {
         // this.anim.stop();
         console.log("successfully saved");
         this.onReset();
-        this.successSnackBar();
+        this.successSnackBar("Details Saved Successfully!");
       });
 
   }
@@ -189,7 +189,7 @@ export class BibleInfoComponent implements OnInit {
         this.child.UpdateRowValues(createDailyData, this.uniqueId)
         // this.anim.stop();
         this.onReset();
-        this.successSnackBar();
+        this.successSnackBar("Details Uploaded Successfully!");
       })
   }
 
@@ -220,7 +220,7 @@ export class BibleInfoComponent implements OnInit {
         .subscribe(data => {
           this.child.deleteRowValues(this.uniqueId)
           this.onReset();
-          this.successSnackBar();
+          this.successSnackBar("Details deleted Successfully!");
         })
     }
   }
@@ -231,24 +231,23 @@ export class BibleInfoComponent implements OnInit {
   }
 
 
-  message: string = 'Bible Information Uploaded.';
-  actionButtonLabel: string = 'Success';
+  actionButtonLabel: string = 'Ok';
   action: boolean = true;
   setAutoHide: boolean = true;
-  autoHide: number = 2000;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  autoHide: number = 3000;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   addExtraClass: boolean = false;
 
-  successSnackBar() {
+  successSnackBar(message: string) {
 
     let config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
     config.duration = this.setAutoHide ? this.autoHide : 0;
-    //config.extraClasses = this.addExtraClass ? ['test'] : undefined;
-    this.snackBar.open(this.message, this.action ? this.actionButtonLabel : undefined, config);
+    config.panelClass = ['success-snapbar']
+    this.snackBar.open(message, this.action ? this.actionButtonLabel : undefined, config);
   }
 
   openNameDialog(): void {

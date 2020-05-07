@@ -88,16 +88,49 @@ export class AdminService {
     return this.http.get<Activity[]>('/admin/activity/all');
   }
 
-  public postActivityInfo(activity): Observable<any> {
-    return this.http.post('/admin/activity', activity, { responseType: 'text' });
+  public postActivityInfo(activity, files): Observable<any> {
+
+    let formdata = new FormData();
+    const blobOverrides = new Blob([JSON.stringify(activity)], {
+      type: 'application/json',
+    });
+
+    formdata.append('activity', blobOverrides);
+    files.forEach(file => {
+      formdata.append('files', file);
+    });
+
+    return this.http.post('/admin/activity', formdata, { responseType: 'text' });
   }
 
-  public putActivityInfo(activity, uniqueId): Observable<any> {
-    return this.http.put('/admin/activity/' + uniqueId, activity, { responseType: 'text' });
+  public putActivityInfo(activity, files, uniqueId, deletedPicsUrl): Observable<any> {
+
+    let formdata = new FormData();
+    const blobOverrides = new Blob([JSON.stringify(activity)], {
+      type: 'application/json',
+    });
+
+    const blobPicsOverrides = new Blob([JSON.stringify(deletedPicsUrl)], {
+      type: 'application/json',
+    });
+
+    formdata.append('activity', blobOverrides);
+    formdata.append('deletedPicsUrl', blobPicsOverrides);
+    files.forEach(file => {
+      formdata.append('files', file);
+    });
+
+
+    return this.http.put('/admin/activity/' + uniqueId, formdata, { responseType: 'text' });
   }
 
-  public deleteActivityInfo(uniqueId): Observable<any> {
-    return this.http.delete<any>('/admin/activity/' + uniqueId);
+  public deleteActivityInfo(uniqueId, pics): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: pics
+    };
+
+    return this.http.delete<any>('/admin/activity/' + uniqueId, httpOptions);
   }
 
   // Meeting CRUD

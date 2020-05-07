@@ -107,3 +107,17 @@ div.box {
     top: 0;
     opacity: 0;
   }
+
+  ::ng-deep snack-bar-container.success-snapbar {
+    background: black;
+    margin-top: 80px !important
+  }
+  
+  ::ng-deep .success-snapbar .mat-simple-snackbar {
+    color: white;
+  }
+  
+  
+  ::ng-deep snack-bar-container simple-snack-bar .mat-simple-snackbar-action {
+    color: yellow;
+  }

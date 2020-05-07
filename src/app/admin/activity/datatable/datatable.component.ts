@@ -44,6 +44,8 @@ export class ActivityDatatableComponent implements OnInit {
         this.ELEMENT_DATA[i].helpedBy = activity.helpedBy;
         this.ELEMENT_DATA[i].organizedBy = activity.organizedBy;
         this.ELEMENT_DATA[i].participatedBy = activity.participatedBy
+        this.ELEMENT_DATA[i].picsUrl = activity.picsUrl
+        this.ELEMENT_DATA[i].picsModel = activity.picsModel
       }
     }
     
@@ -62,6 +64,15 @@ export class ActivityDatatableComponent implements OnInit {
       }
     }
     
+  }
+
+  getListOfPicsUrl(uniqueId) {
+    console.log("getting pics")
+    for(let i=0;i< this.ELEMENT_DATA.length;i++){
+      if(this.ELEMENT_DATA[i].uniqueId==uniqueId) {
+        return this.ELEMENT_DATA[i].picsUrl;
+      }
+    }
   }
 
 }

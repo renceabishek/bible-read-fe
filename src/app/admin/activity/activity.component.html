@@ -7,17 +7,15 @@
                 fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
                 
                 <div fxFlex="66" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
-                    <mat-form-field fxFlex="90" appearance="outline">
+                    <mat-form-field fxFlex="70" appearance="outline">
                         <mat-label>TITLE</mat-label>
                         <input matInput  placeholder="Enter the Event Title"  formControlName="title">
                         <mat-error *ngIf="errorHandling('title', 'required')">
                             You must provide a Event Title
                         </mat-error>
                     </mat-form-field>
-                </div>
 
-               <div fxFlex="33">
-                    <mat-form-field appearance="outline">
+                    <mat-form-field fxFlex appearance="outline">
                         <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Date of Event">
                         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
@@ -26,6 +24,29 @@
                         </mat-error>
                     </mat-form-field>
                 </div> 
+
+                <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+                    <mat-label fxFlex="30" style="text-align: right">Pics / Docs</mat-label>
+                    <div fxFlex="60" class="nameElement">
+                        <tr *ngFor="let pics of selectedPicsNames; let i = index">
+                            <td (click)="onOpenClick(i)" style="cursor: pointer">{{pics.name}}
+                                <a mat-button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="clearNames(i,'pics')">
+                                    <mat-icon>close</mat-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    </div>
+                    <div fxFlex class="upload-btn-wrapper">
+                        <a mat-mini-fab style="width: 32px;">
+                            <mat-icon >attach_file</mat-icon>
+                        </a>
+                        <input type="file" name="myfile"
+                         (change)="onPicsSelect($event)" accept=".png, .jpg, .jpeg, .pdf" />
+                    </div>
+                    <div fxFlex style="padding-left: 136px; font-size: 12px;">
+                        Maximum 3 pics allowed (png,jpg,jpeg,pdf)</div>
+                </div>
 
                 <div fxFlex="33" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
                     <mat-label fxFlex="30" style="text-align: right">Participated By</mat-label>
