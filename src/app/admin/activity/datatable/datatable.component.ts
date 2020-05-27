@@ -3,6 +3,7 @@ import { Activity } from 'src/app/model/Activity';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { AdminService } from 'src/app/service/admin.service';
 import { DOCUMENT } from '@angular/common';
+import { NameModel } from '../../model/NameModel';
 
 @Component({
   selector: 'app-activityDatatable',
@@ -12,6 +13,7 @@ import { DOCUMENT } from '@angular/common';
 export class ActivityDatatableComponent implements OnInit {
 
   ELEMENT_DATA: Activity[] 
+  allNames: NameModel[] = [];
 
   displayedColumns: string[] = ['DATE', 'TITLE'];
   dataSource = new MatTableDataSource<Activity>(this.ELEMENT_DATA);
@@ -26,8 +28,61 @@ export class ActivityDatatableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.adminService.viewActivityInfo().subscribe(data=>{
       this.ELEMENT_DATA = data;
-      this.dataSource = new MatTableDataSource<Activity>(this.ELEMENT_DATA);
+      this.ELEMENT_DATA.forEach(f=>{
+        f.organizedByModel=[];
+        f.participatedByModel=[];
+        f.helpedByModel=[];
+      })
+      this.adminService.getProfiles().subscribe(data1 => {
+        let value: NameModel = {
+          name: "All",
+          uniqueId: "1000"
+        }
+        this.allNames.push(value)
+
+        data1.forEach(f => {  
+          let value: NameModel = {
+            name: f.name,
+            uniqueId: f.uniqueId
+          }
+          this.allNames.push(value)
+        })
+        this.sendNameAndUniqueId(this.allNames);
+      })
     })
+  }
+
+  sendNameAndUniqueId(nameModel: NameModel[]){
+
+        for(let i=0;i< this.ELEMENT_DATA.length;i++){
+          this.ELEMENT_DATA[i].participatedBy.forEach(participate=>{
+            let name= nameModel.filter(id=>id.uniqueId==participate).map(name=>name.name).toString();
+            let newNameModel:NameModel={
+              name: name,
+              uniqueId: participate
+            }
+            this.ELEMENT_DATA[i].participatedByModel.push(newNameModel)
+          })
+          this.ELEMENT_DATA[i].organizedBy.forEach(organize=>{
+            let name= nameModel.filter(id=>id.uniqueId==organize).map(name=>name.name).toString();
+            let newNameModel:NameModel={
+              name: name,
+              uniqueId: organize
+            }
+            this.ELEMENT_DATA[i].organizedByModel.push(newNameModel)
+          })
+          this.ELEMENT_DATA[i].helpedBy.forEach(help=>{
+            let name= nameModel.filter(id=>id.uniqueId==help).map(name=>name.name).toString();
+            let newNameModel:NameModel={
+              name: name,
+              uniqueId: help
+            }
+            this.ELEMENT_DATA[i].helpedByModel.push(newNameModel)
+          })
+          console.log("checking.....")
+        }
+        this.dataSource = new MatTableDataSource<Activity>(this.ELEMENT_DATA);
+        
   }
 
 
@@ -46,9 +101,11 @@ export class ActivityDatatableComponent implements OnInit {
         this.ELEMENT_DATA[i].participatedBy = activity.participatedBy
         this.ELEMENT_DATA[i].picsUrl = activity.picsUrl
         this.ELEMENT_DATA[i].picsModel = activity.picsModel
+        this.ELEMENT_DATA[i].participatedByModel = activity.participatedByModel
+        this.ELEMENT_DATA[i].organizedByModel = activity.organizedByModel
+        this.ELEMENT_DATA[i].helpedByModel = activity.helpedByModel
       }
     }
-    
   }
 
   saveRowValues(dailyData) {

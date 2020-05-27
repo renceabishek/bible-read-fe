@@ -59,9 +59,9 @@ export class NameBoxComponent implements OnInit {
 
 export interface DialogDataName {
   name: any;
-  selectedNames: string[]
 }
 
 export interface PeriodicElementName {
 name: string
+uniqueId: string
 }

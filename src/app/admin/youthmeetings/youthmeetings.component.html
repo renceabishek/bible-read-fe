@@ -9,7 +9,7 @@
                     <mat-label fxFlex="30" style="text-align: right">M.O.C</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let moc of selectedMocNames; let i = index">
-                            <td>{{moc}}
+                            <td>{{moc.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'moc')">
                                     <mat-icon>close</mat-icon>
@@ -25,7 +25,7 @@
                     <mat-label fxFlex="30" style="text-align: right; font-size: 14px">ARRANGEMENTS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let arrange of selectedArrangeNames; let i = index">
-                            <td>{{arrange}}
+                            <td>{{arrange.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'arrange')">
                                     <mat-icon>close</mat-icon>
@@ -41,7 +41,7 @@
                     <mat-label fxFlex="30" style="text-align: right">WORSHIPERS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let worshipers of selectedWorshipersNames; let i = index">
-                            <td>{{worshipers}}
+                            <td>{{worshipers.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'worshipers')">
                                     <mat-icon>close</mat-icon>
@@ -57,7 +57,7 @@
                     <mat-label fxFlex="30" style="text-align: right">MUSICIANS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let musicians of selectedMusiciansNames; let i = index">
-                            <td>{{musicians}}
+                            <td>{{musicians.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'musicians')">
                                     <mat-icon>close</mat-icon>
@@ -73,7 +73,7 @@
                     <mat-label fxFlex="30" style="text-align: right">SINGERS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let singers of selectedSingersNames; let i = index">
-                            <td>{{singers}}
+                            <td>{{singers.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'songs')">
                                     <mat-icon>close</mat-icon>
@@ -99,7 +99,7 @@
                     <mat-label fxFlex="30" style="text-align: right">TESTIMONY</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let testimony of selectedTestimonyNames; let i = index">
-                            <td>{{testimony}}
+                            <td>{{testimony.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'testimony')">
                                     <mat-icon>close</mat-icon>
@@ -115,7 +115,7 @@
                     <mat-label fxFlex="30" style="text-align: right">WORD OF GOD</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let wog of selectedWogNames; let i = index">
-                            <td>{{wog}}
+                            <td>{{wog.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'aboutWog')">
                                     <mat-icon>close</mat-icon>
@@ -141,7 +141,7 @@
                     <mat-label fxFlex="30" style="text-align: right">OTHERS</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let aboutOthers of selectedOthersNames; let i = index">
-                            <td>{{aboutOthers}}
+                            <td>{{aboutOthers.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'aboutOthers')">
                                     <mat-icon>close</mat-icon>

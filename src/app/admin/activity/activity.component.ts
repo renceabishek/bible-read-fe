@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm, FormGroupDirective } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { AdminService } from 'src/app/service/admin.service';
-import { NameModel } from '../youthmeetings/youthmeetings.component';
 import { NameBoxComponent } from '../dialog/name-box/name-box.component';
 import { formatDate } from '@angular/common';
 import { Activity } from 'src/app/model/Activity';
 import { ActivityDatatableComponent } from './datatable/datatable.component';
 import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.service';
+import { NameModel } from '../model/NameModel';
 
 @Component({
   selector: 'app-activity',
@@ -17,10 +17,10 @@ import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.se
 export class ActivityComponent implements OnInit {
 
   activityForm: FormGroup;
-  allNames = [];
-  selectedOrganizersNames = [];
-  selectedParticipationsNames = [];
-  selectedHelpersNames = [];
+  allNames: NameModel[] = [];
+  selectedOrganizersNames: NameModel[] = [];
+  selectedParticipationsNames: NameModel[] = [];
+  selectedHelpersNames: NameModel[] = [];
   selectedPicsNames: picsModel[] = [];
   deletedPicsUrl=[];
   saveUP = false;
@@ -62,16 +62,19 @@ export class ActivityComponent implements OnInit {
     this.adminService.getProfiles().subscribe(data => {
       
       let value: NameModel = {
-        name: "All"
+        name: "All",
+        uniqueId: "1000"
       }
       this.allNames.push(value)
 
       data.forEach(f => {
         let value: NameModel = {
-          name: f.name
+          name: f.name,
+          uniqueId: f.uniqueId
         }
         this.allNames.push(value)
       })
+     // this.child.sendNameAndUniqueId(this.allNames)
     });
 
     this.activityForm.get('date').setValue(formatDate(new Date, 'yyyy-MM-dd', 'en'));
@@ -129,9 +132,12 @@ export class ActivityComponent implements OnInit {
       title: this.activityForm.get('title').value,
       date: formatDate(this.activityForm.controls.date.value, 'yyyy-MM-dd', 'en'),
       content: this.activityForm.get('content').value,
-      helpedBy: this.selectedHelpersNames,
-      organizedBy: this.selectedOrganizersNames,
-      participatedBy: this.selectedParticipationsNames
+      helpedBy: this.selectedHelpersNames.map(f=>f.uniqueId),
+      helpedByModel: this.selectedHelpersNames,
+      organizedBy: this.selectedOrganizersNames.map(f=>f.uniqueId),
+      organizedByModel: this.selectedOrganizersNames,
+      participatedBy: this.selectedParticipationsNames.map(f=>f.uniqueId),
+      participatedByModel: this.selectedParticipationsNames
     };
     activity.picsUrl = [];
     if (this.saveUP == true) {
@@ -238,7 +244,7 @@ export class ActivityComponent implements OnInit {
       console.log('The dialog was closed ' + result);
       if(result!=null) {
         result.forEach(element => {
-          this.addToOrRemoveFromSelectedList('add', tag, element.name);
+          this.addToOrRemoveFromSelectedList('add', tag, element);
         });
       }     
     });
@@ -257,35 +263,39 @@ export class ActivityComponent implements OnInit {
     this.addToOrRemoveFromSelectedList('remove', tag, index);
   }
 
-  addToOrRemoveFromSelectedList(flag, tag, name): void {
+  addToOrRemoveFromSelectedList(flag, tag, element): void {
     if (flag == "add") {
+      let nameElement: NameModel= {
+        name: element.name,
+        uniqueId: element.uniqueId
+      }
       if (tag == "organizers") {
-        if(!this.selectedOrganizersNames.includes(name)) {
-          this.selectedOrganizersNames.push(name);
+        if(!this.selectedOrganizersNames.map(f=>f.uniqueId).includes(element.uniqueId)) {
+          this.selectedOrganizersNames.push(element);
         }
       } else if (tag == "helpers") {
-        if(!this.selectedHelpersNames.includes(name)) {
-          this.selectedHelpersNames.push(name);
+        if(!this.selectedHelpersNames.map(f=>f.uniqueId).includes(element.uniqueId)) {
+          this.selectedHelpersNames.push(element);
         }        
       } else if (tag == "participants") {
-        if(!this.selectedParticipationsNames.includes(name)) {
-          this.selectedParticipationsNames.push(name);
+        if(!this.selectedParticipationsNames.map(f=>f.uniqueId).includes(element.uniqueId)) {
+          this.selectedParticipationsNames.push(nameElement);
         }        
       } else if (tag == "pics") {
-        this.selectedPicsNames.push(name);
+        this.selectedPicsNames.push(element);
       }
     } else if (flag == "remove") {
       if (tag == "organizers") {
-        this.selectedOrganizersNames.splice(name, 1);
+        this.selectedOrganizersNames.splice(element, 1);
       } else if (tag == "helpers") {
-        this.selectedHelpersNames.splice(name, 1);
+        this.selectedHelpersNames.splice(element, 1);
       } else if (tag == "participants") {
-        this.selectedParticipationsNames.splice(name, 1);
+        this.selectedParticipationsNames.splice(element, 1);
       } else if (tag == "pics") {
-        if(this.selectedPicsNames[name].file==null) {
-          this.deletedPicsUrl.push(this.selectedPicsNames[name].url)
+        if(this.selectedPicsNames[element].file==null) {
+          this.deletedPicsUrl.push(this.selectedPicsNames[element].url)
         }
-        this.selectedPicsNames.splice(name, 1);
+        this.selectedPicsNames.splice(element, 1);
       }
     }
   }
@@ -294,18 +304,23 @@ export class ActivityComponent implements OnInit {
     this.selectedOrganizersNames=[]
     this.selectedHelpersNames = []
     this.selectedParticipationsNames = []
+
     this.activityForm.controls.title.setValue(activity.title);
     this.activityForm.controls.content.setValue(activity.content);
     this.activityForm.controls.date.setValue(formatDate(activity.date, 'yyyy-MM-dd', 'en'));
-    if(this.isArrayNotEmpty(activity.helpedBy)) {
-      activity.helpedBy.forEach(help=>this.selectedHelpersNames.push(help))
+    if(this.isArrayNotEmpty(activity.helpedByModel)) {
+      activity.helpedByModel.forEach(help=>this.selectedHelpersNames.push(help))
     }
-    if(this.isArrayNotEmpty(activity.organizedBy)) {
-      activity.organizedBy.forEach(organize=>this.selectedOrganizersNames.push(organize))
+    // this.isNameModelAvailable(activity.organizedByModel,activity.organizedBy, this.selectedOrganizersNames,activity.uniqueId);
+    // this.isNameModelAvailable(activity.participatedByModel,activity.participatedBy, this.selectedParticipationsNames,activity.uniqueId);
+
+    if(this.isArrayNotEmpty(activity.organizedByModel)) {
+      activity.organizedByModel.forEach(f=>this.selectedOrganizersNames.push(f))
     }
-    if(this.isArrayNotEmpty(activity.participatedBy)) {
-      activity.participatedBy.forEach(participate=>this.selectedParticipationsNames.push(participate))
+    if(this.isArrayNotEmpty(activity.participatedByModel)) {
+      activity.participatedByModel.forEach(f=>this.selectedParticipationsNames.push(f))
     }
+    
 
     if(activity.picsUrl!=null) {
       for(let i=0;i<activity.picsUrl.length;i++) {
@@ -316,7 +331,7 @@ export class ActivityComponent implements OnInit {
         }
         this.selectedPicsNames.push(picsModel)
       }
-     } 
+     }
      else {
       this.selectedPicsNames=[];
     }

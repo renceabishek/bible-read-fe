@@ -52,7 +52,7 @@
                     <mat-label fxFlex="30" style="text-align: right">Participated By</mat-label>
                     <div fxFlex="60"  class="nameElement">
                         <tr cellspacing="10"  *ngFor="let participants of selectedParticipationsNames; let i = index">
-                            <td>{{participants}}
+                            <td>{{participants.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'participants')">
                                     <mat-icon>close</mat-icon>
@@ -69,7 +69,7 @@
                     <mat-label fxFlex="30" style="text-align: right">Organized By</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let organizers of selectedOrganizersNames; let i = index">
-                            <td>{{organizers}}
+                            <td>{{organizers.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'organizers')">
                                     <mat-icon>close</mat-icon>
@@ -86,7 +86,7 @@
                     <mat-label fxFlex="30" style="text-align: right">Helped By</mat-label>
                     <div fxFlex="60" class="nameElement">
                         <tr *ngFor="let helpers of selectedHelpersNames; let i = index">
-                            <td>{{helpers}}
+                            <td>{{helpers.name}}
                                 <a mat-button matSuffix mat-icon-button aria-label="Clear"
                                     (click)="clearNames(i,'helpers')">
                                     <mat-icon>close</mat-icon>

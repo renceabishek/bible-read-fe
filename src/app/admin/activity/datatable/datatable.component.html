@@ -17,7 +17,11 @@
             style="cursor: pointer;" (click)="selectRow(element)" class="check">
             <div fxFlex="40">{{element.title}}</div>
             <div fxFlex="20">{{element.date}}</div>
-            <div fxFlex="40">{{element.organizedBy}}</div>
+            <div fxFlex="40">
+                <span *ngFor="let organize of element.organizedByModel">
+                    {{organize.name}}
+                </span>
+            </div>
         </div>
     </div>
 </div>

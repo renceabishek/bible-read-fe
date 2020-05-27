@@ -7,6 +7,7 @@ import { formatDate } from '@angular/common';
 import { Meeting } from 'src/app/model/Meeting';
 import { MeetingDatatableComponent } from './datatable/datatable.component';
 import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.service';
+import { NameModel } from '../model/NameModel';
 
 @Component({
   selector: 'app-youthmeetings',
@@ -18,15 +19,15 @@ export class YouthmeetingsComponent implements OnInit {
   uniqueId="";
   crudFlag="";
   saveUP=false;
-  dialogNames = [];
-  selectedMocNames = [];
-  selectedMusiciansNames = [];
-  selectedArrangeNames = [];
-  selectedSingersNames = [];
-  selectedWorshipersNames = [];
-  selectedTestimonyNames = [];
-  selectedWogNames = [];
-  selectedOthersNames=[];
+  dialogNames: NameModel[] = [];
+  selectedMocNames: NameModel[] = [];
+  selectedMusiciansNames: NameModel[] = [];
+  selectedArrangeNames: NameModel[] = [];
+  selectedSingersNames: NameModel[] = [];
+  selectedWorshipersNames: NameModel[] = [];
+  selectedTestimonyNames: NameModel[] = [];
+  selectedWogNames: NameModel[] = [];
+  selectedOthersNames: NameModel[]=[];
   selectedPicsNames: picsModel[];
   updatePicsNames: picsModel[];
   meetingsForm: FormGroup;
@@ -60,13 +61,15 @@ export class YouthmeetingsComponent implements OnInit {
     this.adminService.getProfiles().subscribe(data => {
 
       let value: NameModel = {
-        name: "All"
+        name: "All",
+        uniqueId: "1000"
       }
       this.dialogNames.push(value)
 
       data.forEach(f => {
         let value: NameModel = {
-          name: f.name
+          name: f.name,
+          uniqueId: f.uniqueId
         }
         this.dialogNames.push(value)
       })
@@ -119,16 +122,24 @@ export class YouthmeetingsComponent implements OnInit {
     this.spinnerService.show();
     let meeting = <Meeting>  {
       date: formatDate(this.meetingsForm.get('date').value, 'yyyy-MM-dd', 'en'),
-      moc: this.selectedMocNames,
-      arrangements: this.selectedArrangeNames,
-      worshipers: this.selectedWorshipersNames,
-      musicians: this.selectedMusiciansNames,
-      singers: this.selectedSingersNames,
+      moc: this.selectedMocNames.map(f=>f.uniqueId),
+      mocModel: this.selectedMocNames,
+      arrangements: this.selectedArrangeNames.map(f=>f.uniqueId),
+      arrangementsModel: this.selectedArrangeNames,
+      worshipers: this.selectedWorshipersNames.map(f=>f.uniqueId),
+      worshipersModel: this.selectedWorshipersNames,
+      musicians: this.selectedMusiciansNames.map(f=>f.uniqueId),
+      musiciansModel: this.selectedMusiciansNames,
+      singers: this.selectedSingersNames.map(f=>f.uniqueId),
+      singersModel: this.selectedSingersNames,
       songs: this.meetingsForm.get('songs').value,
-      testimony: this.selectedTestimonyNames,
-      wog: this.selectedWogNames,
+      testimony: this.selectedTestimonyNames.map(f=>f.uniqueId),
+      testimonyModel: this.selectedTestimonyNames,
+      wog: this.selectedWogNames.map(f=>f.uniqueId),
+      wogModel: this.selectedWogNames,
       aboutWog: this.meetingsForm.get('aboutWog').value,
-      others: this.selectedOthersNames,
+      others: this.selectedOthersNames.map(f=>f.uniqueId),
+      othersModel: this.selectedOthersNames,
       othersAbout: this.meetingsForm.get('aboutOthers').value,
       remarks: this.meetingsForm.get('remarks').value,
     }
@@ -280,7 +291,7 @@ export class YouthmeetingsComponent implements OnInit {
       console.log('The dialog was closed ' + result);
       if(result!=null) {
       result.forEach(element => {
-        this.addToOrRemoveFromSelectedList('add', tag, element.name);
+        this.addToOrRemoveFromSelectedList('add', tag, element);
         
       });
     }
@@ -292,71 +303,71 @@ export class YouthmeetingsComponent implements OnInit {
     this.addToOrRemoveFromSelectedList('remove', tag, index);
   }
 
-  addToOrRemoveFromSelectedList(flag, tag, name): void {
+  addToOrRemoveFromSelectedList(flag, tag, element): void {
     if (flag == "add") {
       if (tag == "moc") {
-        if(!this.selectedMocNames.includes(name)){
-          this.selectedMocNames.push(name);
+        if(!this.selectedMocNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedMocNames.push(element);
         }        
       } else if (tag == "musicians") {
-        if(!this.selectedMusiciansNames.includes(name)){
-          this.selectedMusiciansNames.push(name);
+        if(!this.selectedMusiciansNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedMusiciansNames.push(element);
         }        
       } else if (tag == "arrange") {
-        if(!this.selectedArrangeNames.includes(name)){
-          this.selectedArrangeNames.push(name);
+        if(!this.selectedArrangeNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedArrangeNames.push(element);
         }
       } else if (tag == "songs") {
-        if(!this.selectedSingersNames.includes(name)){
-          this.selectedSingersNames.push(name);
+        if(!this.selectedSingersNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedSingersNames.push(element);
           this.meetingsForm.get(tag).updateValueAndValidity();
         }                
       } else if (tag == "worshipers") {
-        if(!this.selectedWorshipersNames.includes(name)){
-          this.selectedWorshipersNames.push(name);
+        if(!this.selectedWorshipersNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedWorshipersNames.push(element);
         }
       } else if (tag == "testimony") {
-        if(!this.selectedTestimonyNames.includes(name)){
-          this.selectedTestimonyNames.push(name);
+        if(!this.selectedTestimonyNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedTestimonyNames.push(element);
         }
       } else if (tag == "aboutWog") {
-        if(!this.selectedWogNames.includes(name)){
-          this.selectedWogNames.push(name);
+        if(!this.selectedWogNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedWogNames.push(element);
           this.meetingsForm.get(tag).updateValueAndValidity();
         }       
       } else if (tag == "aboutOthers") {
-        if(!this.selectedOthersNames.includes(name)){
-          this.selectedOthersNames.push(name);
+        if(!this.selectedOthersNames.map(f=>f.uniqueId).includes(element.uniqueId)){
+          this.selectedOthersNames.push(element);
           this.meetingsForm.get(tag).updateValueAndValidity();
         }        
       } else if (tag == "pics") {
-        this.selectedPicsNames.push(name);
+        this.selectedPicsNames.push(element);
       }
     } else if (flag == "remove") {
       if (tag == "moc") {
-        this.selectedMocNames.splice(name, 1);
+        this.selectedMocNames.splice(element, 1);
       } else if (tag == "musicians") {
-        this.selectedMusiciansNames.splice(name, 1);
+        this.selectedMusiciansNames.splice(element, 1);
       } else if (tag == "arrange") {
-        this.selectedArrangeNames.splice(name, 1);
+        this.selectedArrangeNames.splice(element, 1);
       } else if (tag == "songs") {
-        this.selectedSingersNames.splice(name, 1);
+        this.selectedSingersNames.splice(element, 1);
         this.meetingsForm.get(tag).updateValueAndValidity();
       } else if (tag == "worshipers") {
-        this.selectedWorshipersNames.splice(name, 1);
+        this.selectedWorshipersNames.splice(element, 1);
       } else if (tag == "testimony") {
-        this.selectedTestimonyNames.splice(name, 1);
+        this.selectedTestimonyNames.splice(element, 1);
       } else if (tag == "aboutWog") {
-        this.selectedWogNames.splice(name, 1);
+        this.selectedWogNames.splice(element, 1);
         this.meetingsForm.get(tag).updateValueAndValidity();
       } else if (tag == "aboutOthers") {
-        this.selectedOthersNames.splice(name, 1);
+        this.selectedOthersNames.splice(element, 1);
         this.meetingsForm.get(tag).updateValueAndValidity();
       } else if (tag == "pics") {
-        if(this.selectedPicsNames[name].file==null) {
-          this.deletedPicsUrl.push(this.selectedPicsNames[name].url)
+        if(this.selectedPicsNames[element].file==null) {
+          this.deletedPicsUrl.push(this.selectedPicsNames[element].url)
         }
-        this.selectedPicsNames.splice(name, 1);
+        this.selectedPicsNames.splice(element, 1);
       }
     }
   }
@@ -364,31 +375,31 @@ export class YouthmeetingsComponent implements OnInit {
   selectRowValue(meeting: Meeting) {
     this.clearFields();
     this.meetingsForm.controls.date.setValue(formatDate(meeting.date, 'yyyy-MM-dd', 'en'));
-    if(this.isArrayNotEmpty(meeting.moc)) {
-      meeting.moc.forEach(moc=>this.selectedMocNames.push(moc));
+    if(this.isArrayNotEmpty(meeting.mocModel)) {
+      meeting.mocModel.forEach(moc=>this.selectedMocNames.push(moc));
     }
-    if(this.isArrayNotEmpty(meeting.arrangements)) {
-      meeting.arrangements.forEach(arrangements=>this.selectedArrangeNames.push(arrangements));
+    if(this.isArrayNotEmpty(meeting.arrangementsModel)) {
+      meeting.arrangementsModel.forEach(arrangements=>this.selectedArrangeNames.push(arrangements));
     }    
-    if(this.isArrayNotEmpty(meeting.worshipers)) {
-      meeting.worshipers.forEach(worshipers=>this.selectedWorshipersNames.push(worshipers));
+    if(this.isArrayNotEmpty(meeting.worshipersModel)) {
+      meeting.worshipersModel.forEach(worshipers=>this.selectedWorshipersNames.push(worshipers));
     }
-    if(this.isArrayNotEmpty(meeting.musicians)) {
-      meeting.musicians.forEach(musicians=>this.selectedMusiciansNames.push(musicians));
+    if(this.isArrayNotEmpty(meeting.musiciansModel)) {
+      meeting.musiciansModel.forEach(musicians=>this.selectedMusiciansNames.push(musicians));
     }
-    if(this.isArrayNotEmpty(meeting.singers)) {
-      meeting.singers.forEach(singers=>this.selectedSingersNames.push(singers));
+    if(this.isArrayNotEmpty(meeting.singersModel)) {
+      meeting.singersModel.forEach(singers=>this.selectedSingersNames.push(singers));
     }    
     this.meetingsForm.controls.songs.setValue(meeting.songs)
-    if(this.isArrayNotEmpty(meeting.testimony)) {
-      meeting.testimony.forEach(testimony=>this.selectedTestimonyNames.push(testimony));
+    if(this.isArrayNotEmpty(meeting.testimonyModel)) {
+      meeting.testimonyModel.forEach(testimony=>this.selectedTestimonyNames.push(testimony));
     }
-    if(this.isArrayNotEmpty(meeting.wog)) {
-      meeting.wog.forEach(wog=>this.selectedWogNames.push(wog));
+    if(this.isArrayNotEmpty(meeting.wogModel)) {
+      meeting.wogModel.forEach(wog=>this.selectedWogNames.push(wog));
     }
     this.meetingsForm.controls.aboutWog.setValue(meeting.aboutWog)
-    if(this.isArrayNotEmpty(meeting.others)) {
-      meeting.others.forEach(others=>this.selectedOthersNames.push(others));
+    if(this.isArrayNotEmpty(meeting.othersModel)) {
+      meeting.othersModel.forEach(others=>this.selectedOthersNames.push(others));
     }
     this.meetingsForm.controls.aboutOthers.setValue(meeting.othersAbout)
     this.meetingsForm.controls.remarks.setValue(meeting.remarks)
@@ -431,10 +442,6 @@ export class YouthmeetingsComponent implements OnInit {
 }
 
 
-
-export class NameModel {
-  name: string
-}
 
 export class picsModel {
   name: string

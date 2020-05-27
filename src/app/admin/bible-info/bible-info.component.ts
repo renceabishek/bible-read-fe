@@ -64,9 +64,6 @@ export class BibleInfoComponent implements OnInit {
     };
   }
 
-  handleAnimation(anim: any) {
-    this.anim = anim;
-  }
 
   ngOnInit() {
     //this.commonService.modifyMenuActive('bibleinfo'); , Validators.pattern("^[0-9]*$"), Validators.minLength(3)

@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, NgForm, FormGroupDirective } from '@angular/forms';
 import { Profile } from '../../model/Profile';
 import { formatDate } from '@angular/common';
 import { AdminService } from '../../service/admin.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBarConfig, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { SkillBoxComponent } from '../dialog/skill-box/skill-box.component';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ProfileGet } from 'src/app/model/ProfilesGet';
 import { UpdateProfile } from 'src/app/model/UpdateProfile';
+import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.service';
 
 @Component({
   selector: 'app-youthmembers',
@@ -34,9 +35,13 @@ export class YouthMembersComponent implements OnInit {
     { headerName: 'Name', field: 'name', sortable: true, filter: true }
   ];
   profiles: FormGroup;
-  searchProfiles: FormGroup;
+  @ViewChild(FormGroupDirective, { static: true }) form: FormGroupDirective
 
-  constructor(private formBuilder: FormBuilder, private adminService: AdminService, public dialog: MatDialog) { }
+  searchProfiles: FormGroup;
+  
+
+  constructor(private formBuilder: FormBuilder, private adminService: AdminService, public dialog: MatDialog,
+    private spinnerService: SpinnerOverlayServiceService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.profiles = this.formBuilder.group({
@@ -66,12 +71,13 @@ export class YouthMembersComponent implements OnInit {
 
     this.profiles.controls.sex.setValue("male");
     this.profiles.controls.role.setValue("member");
+    this.profiles.get('dob').setValue(formatDate(new Date, 'yyyy-MM-dd', 'en'))
   }
 
   private _filterName(value: string): ProfileGet[] {
     if (value != null) {
       return this.nameData
-        .filter(option => option.name.toLowerCase().indexOf(value) === 0);
+        .filter(option => option.name.toLowerCase().includes(value));
 
     }
   }
@@ -82,6 +88,7 @@ export class YouthMembersComponent implements OnInit {
 
   selectName(fprofile): void {
     console.log('id ' + fprofile.uniqueId)
+    this.spinnerService.show();
     this.uniqueId = fprofile.uniqueId
     this.fetchProfile(fprofile.uniqueId);
     this.saveUP = true;
@@ -110,7 +117,7 @@ export class YouthMembersComponent implements OnInit {
       } else {
         this.avatarBackGround=data.profileUrl;
       }
-      
+      this.spinnerService.hide();
     });
   }
 
@@ -131,7 +138,7 @@ export class YouthMembersComponent implements OnInit {
     }
   }
 
-  public onSubmit() {
+  public onSubmit(profileForm) {
 
     if (this.profiles.invalid) {
       console.log("form vali")
@@ -139,9 +146,10 @@ export class YouthMembersComponent implements OnInit {
     }
     console.log('name ' + this.profiles.value.name)
     console.log('file ' + this.file)
+    this.spinnerService.show();
 
     if (this.saveUP == true) {
-      return this.onUpdate();
+      return this.onUpdate(profileForm);
     }
 
     var createProfile = <Profile>{
@@ -158,26 +166,32 @@ export class YouthMembersComponent implements OnInit {
       this.uniqueId = data;
       this.removeOrAddSearchButtonResponse("add");
       this.saveUP=true;
+      profileForm.resetForm();
+      this.onClear();
+      this.spinnerService.hide();
+      this.successSnackBar("Profile Saved Succesfully !");
     })
     //this.rowData.push()
+  }
+
+  onReset(profileForm): void {
+    profileForm.resetForm();
+    this.onClear();
   }
 
   onClear(): void {
     this.saveUP = false;
     this.uniqueId = "";
-    this.profiles.get('name').setValue("");
-    this.profiles.get('dob').setValue(formatDate(new Date, 'yyyy-MM-dd', 'en')),
+    this.profiles.get('dob').setValue(formatDate(new Date, 'yyyy-MM-dd', 'en'))
     this.profiles.get('isBibleReader').setValue(false);
-    this.profiles.get('role').setValue("");
     this.skillSet = [];
-    this.profiles.get('about').setValue("");
     this.avatarBackGround = '../../../assets/admin/profilepic/male.jpg';
     this.profiles.controls.sex.setValue("male");
     this.profiles.controls.role.setValue("member");
     this.searchProfiles.get('search').setValue("");
   }
 
-  onUpdate(): void {
+  onUpdate(profileForm): void {
 
     var updateProfile = <UpdateProfile>{
       name: this.profiles.get('name').value,
@@ -193,7 +207,10 @@ export class YouthMembersComponent implements OnInit {
 
     this.adminService.updateProfile(updateProfile, this.file, this.uniqueId).subscribe(data => {
       this.removeOrAddSearchButtonResponse("update");
+      profileForm.resetForm();
       this.onClear();
+      this.spinnerService.hide();
+      this.successSnackBar("Profile Updated Succesfully !");
     });
 
   }
@@ -241,12 +258,16 @@ export class YouthMembersComponent implements OnInit {
     this.stopSkillSetDialogToBeOpen = true;
   }
 
-  onDeleteProfile(): void {
+  onDeleteProfile(profileForm): void {
     if (this.uniqueId.length > 0) {
+      this.spinnerService.show();
       this.adminService.deleteProfile(this.uniqueId)
         .subscribe(data => {
           this.removeOrAddSearchButtonResponse("remove");
+          profileForm.resetForm();
           this.onClear();
+          this.spinnerService.hide();
+          this.successSnackBar("Profile deleted Succesfully !");
         })
     }
   }
@@ -290,8 +311,24 @@ export class YouthMembersComponent implements OnInit {
   //@ViewChild(NgForm,{static: true}) yourForm: NgForm;
 
 
-  onClearSearch(): void {
-    this.onClear(); 
+  onClearSearch(profileForm): void {
+    this.onReset(profileForm);
+  }
+
+  actionButtonLabel: string = 'Ok';
+  action: boolean = true;
+  setAutoHide: boolean = true;
+  autoHide: number = 3000;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+  successSnackBar(message: string) {
+    let config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = this.setAutoHide ? this.autoHide : 0;
+    config.panelClass = ['success-snapbar']
+    this.snackBar.open(message, this.action ? this.actionButtonLabel : undefined, config);
   }
 
 

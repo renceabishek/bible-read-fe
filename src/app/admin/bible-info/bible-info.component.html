@@ -1,12 +1,12 @@
-<div fxLayout="row" fxLayout.xs="column">
-    <div class="card" fxFlex="50">
+<div fxLayout="column" fxLayout.xs="column" class="card m-3 box" fxFlex="100">
+    <div>
         <h5 class="card-header responsive-font-header">Add/Modify Bible Readers Details</h5>
         <div class="card-body">
-            <form [formGroup]="registerForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center"
-                fxLayoutAlign.xs="start stretch" fxLayout.sm="column" fxLayoutAlign.sm="start stretch"
-                fxLayoutGap="4px grid" (ngSubmit)="onSave()">
+            <form [formGroup]="registerForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
+                fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
+                fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
                 <div fxFlex="40" fxShow="true" fxHide.lt-md="true">
-                    <input type="text"  formControlName="name" class="form-control" [matAutocomplete]="autoname"
+                    <input type="text" formControlName="name" class="form-control" [matAutocomplete]="autoname"
                         placeholder="Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
 
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
@@ -25,8 +25,7 @@
                 <div fxFlex="35" fxShow="true" fxHide.lt-md="true">
                     <mat-form-field>
                         <input formControlName="date" class="form-control" matInput [matDatepicker]="picker1"
-                             placeholder="Date"
-                            [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
+                            placeholder="Date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
                         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
 
@@ -85,22 +84,22 @@
                 </div>
                 <div fxFlex="100" fxLayout="row" fxLayout.lt.sm="column" fxLayoutAlign="end center"
                     fxLayoutAlign.lt-md="center center" fxLayoutGap="4px">
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}} class="btn btn-primary"
-                        type="submit">Save</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}} class="btn btn-primary"
-                        type="submit">Update</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary" (click)="onReset()">Clear</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger" (click)="onDeleteRows()">Delete</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}}
+                        class="btn btn-primary" type="submit">Save</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}}
+                        class="btn btn-primary" type="submit">Update</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary"
+                        (click)="onReset()">Clear</button>
+                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger"
+                        (click)="onDeleteRows()">Delete</button>
                 </div>
             </form>
             <br>
         </div>
     </div>
-    <div class="card" fxFlex>
-        <app-datatable (rowValue)="selectRowValue($event)"></app-datatable>
+    <div style="margin-top: -43px;">
+        <div class="card-body">
+            <app-datatable (rowValue)="selectRowValue($event)"></app-datatable>
+        </div>
     </div>
 </div>
-<lottie-animation-view *ngIf="loading" class="lottie-size"
-                    [options]="lottieConfig"
-                    (animCreated)="handleAnimation($event)">
-    </lottie-animation-view>
