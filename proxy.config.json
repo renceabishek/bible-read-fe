@@ -1,12 +1,12 @@
 {
     "/bible/*": {
-      "target": "http://localhost:8080",
+      "target": "https://bible-read-service.herokuapp.com",
       "secure": true,
       "logLevel": "debug",
       "changeOrigin": true
     },
     "/admin/*": {
-      "target": "http://localhost:8080",
+      "target": "https://bible-read-service.herokuapp.com",
       "secure": true,
       "logLevel": "debug",
       "changeOrigin": true
