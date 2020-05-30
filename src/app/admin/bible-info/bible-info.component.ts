@@ -153,8 +153,8 @@ export class BibleInfoComponent implements OnInit {
     this.nameUniqueId = fname.uniqueId;
   }
 
-  checkSelectedName(fnames) {
-    console.log("change "+fnames);
+  checkSelectedName() {
+    console.log("change ");
     // if (!this.selectedNameToCheck || this.selectedNameToCheck !== this.bibleForm.controls['name'].value) {
     //   //this.bibleForm.controls['name'].setValue(null);
     //   this.bibleForm.get('name').setValue('');

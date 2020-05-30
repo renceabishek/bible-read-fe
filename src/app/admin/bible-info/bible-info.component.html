@@ -9,7 +9,7 @@
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>NAME</mat-label>
                         <input matInput formControlName="name"  [matAutocomplete]="autoname"
-                            forceSelection="true" placeholder="Enter the name" (change)="checkSelectedName(fnames)" />
+                            forceSelection="true" placeholder="Enter the name" (change)="checkSelectedName()" />
                         <mat-error *ngIf="errorHandling('name', 'required')">
                             Name is required
                         </mat-error>
