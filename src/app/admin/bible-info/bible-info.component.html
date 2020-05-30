@@ -15,7 +15,7 @@
                         </mat-error>
                         <mat-autocomplete #autoname="matAutocomplete" [displayWith]="displayFn"
                             (optionSelected)="selectName($event.option.value)">
-                            <mat-option #fnames  *ngFor="let fname of filteredNames | async" [value]="fname">
+                            <mat-option  *ngFor="let fname of filteredNames | async" [value]="fname">
                                 {{fname.name}}
                             </mat-option>
                         </mat-autocomplete>

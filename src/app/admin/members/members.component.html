@@ -3,7 +3,7 @@
         <h5 fxFlex="60">Add/Modify Youth Members detail</h5>
         <div fxFlex fxShow="true" fxHide.lt-md="true">
             <form #searchForm="ngForm" [formGroup]="searchProfiles" fxLayout="row">
-                <input type="text" fxFlex="90" formControlName="search" [(ngModel)]="value" class="form-control"
+                <input type="text" fxFlex="90" formControlName="search" class="form-control"
                     [matAutocomplete]="autoname" placeholder="Search" />
                 <mat-autocomplete #autoname="matAutocomplete" [displayWith]="displayFn"
                     (optionSelected)="selectName($event.option.value)">
@@ -11,7 +11,7 @@
                         {{fprofile.name}}
                     </mat-option>
                 </mat-autocomplete>
-                <button fxFlex mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" 
+                <button fxFlex mat-button matSuffix mat-icon-button aria-label="Clear" 
                         (click)="onClearSearch(profileForm)">
                     <mat-icon>close</mat-icon>
                 </button>

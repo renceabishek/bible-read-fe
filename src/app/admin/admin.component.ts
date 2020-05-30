@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private matIconRegistry: MatIconRegistry, private loginService:AuthenticationService,
+  constructor(private matIconRegistry: MatIconRegistry, public loginService:AuthenticationService,
     private domSanitizer: DomSanitizer, private commonService: CommonService, private router: Router,
     private route: ActivatedRoute) { 
     this.addMobileViewIcons()

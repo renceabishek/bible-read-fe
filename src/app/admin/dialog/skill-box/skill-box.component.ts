@@ -58,6 +58,10 @@ export class SkillBoxComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.skills + 1}`;
   }
 
+  onReset() {
+    
+  }
+
 }
 
 export interface PeriodicElement {

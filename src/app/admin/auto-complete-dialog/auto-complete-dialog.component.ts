@@ -9,6 +9,7 @@ import { AdminService } from 'src/app/service/admin.service';
 })
 export class AutoCompleteDialogComponent implements OnInit {
 
+  filteredNames: any;
   constructor(
     public dialogRef: MatDialogRef<AutoCompleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private adminService: AdminService) {}
