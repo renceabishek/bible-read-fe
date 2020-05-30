@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ChartServiceService } from '../../chart-service.service';
 import { DailyData } from '../../model/DailyData';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, ValidatorFn, AbstractControl, FormGroupDirective } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith, catchError, switchMap } from 'rxjs/operators';
 import { merge } from 'rxjs/observable/merge';
@@ -12,6 +12,9 @@ import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnack
 import { CommonService } from '../../service/commonService';
 import { AutoCompleteDialogComponent } from '../auto-complete-dialog/auto-complete-dialog.component';
 import { DatatableComponent } from './datatable/datatable.component';
+import { NameModel } from '../model/NameModel';
+import { BibleDataService } from 'src/app/service/bible-data.service';
+import { SpinnerOverlayServiceService } from 'src/app/spinner-overlay-service.service';
 
 @Component({
   selector: 'app-bible-info',
@@ -20,12 +23,11 @@ import { DatatableComponent } from './datatable/datatable.component';
 })
 export class BibleInfoComponent implements OnInit {
 
-  registerForm: FormGroup;
+  bibleForm: FormGroup;
   submitted = false;
   saveUP = false;
   crudFlag: String;
 
-  public lottieConfig: Object;
   private anim: any;
   private animationSpeed: number = 1;
   loading = false;
@@ -36,12 +38,17 @@ export class BibleInfoComponent implements OnInit {
     'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel',
     '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs', 'Ecclesiastes',
     'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah',
-    'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi'];
+    'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi',
+    'Matthew','Mark','Luke','John','Acts of the Apostles','Romans','1 Corinthians','2 Corinthians',
+    'Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians',
+    '1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter',
+    '1 John','2 John','3 John','Jude','Revelation'];
   filteredBooks: Observable<string[]>;
 
-  nameData: string[];
-  filteredNames: Observable<string[]>;
+  nameData: NameModel[] = [];
+  filteredNames: Observable<NameModel[]>;
   uniqueId: any;
+  nameUniqueId: string;
 
   name = '';
   date = '';
@@ -52,51 +59,44 @@ export class BibleInfoComponent implements OnInit {
 
 
   @ViewChild(DatatableComponent, { static: true }) child: DatatableComponent;
+  @ViewChild(FormGroupDirective, { static: true }) form: FormGroupDirective;
 
   constructor(private formBuilder: FormBuilder,
     private adminService: AdminService, public snackBar: MatSnackBar, private commonService: CommonService,
-    public dialog: MatDialog) {
-    this.lottieConfig = {
-      path: 'assets/loading.json',
-      renderer: 'canvas',
-      autoplay: false,
-      loop: true
-    };
+    public dialog: MatDialog, private bibleDataService: BibleDataService, 
+      private spinnerService: SpinnerOverlayServiceService) {
   }
 
 
   ngOnInit() {
     //this.commonService.modifyMenuActive('bibleinfo'); , Validators.pattern("^[0-9]*$"), Validators.minLength(3)
 
-    this.registerForm = this.formBuilder.group({
+    this.bibleForm = this.formBuilder.group({
       date: ['', Validators.required],
       name: ['', Validators.required],
       books: ['', Validators.required],
-      chapter: ['', Validators.required],
-      fromVerse: ['', Validators.required],
-      toVerse: ['', Validators.required]
+      chapter: ['', [Validators.required, this.checkChapterWithBible()]],
+      fromVerse: ['', [Validators.required, this.checkVersesWithBible()]],
+      toVerse: ['', [Validators.required, this.checkVersesWithBible()]]
     }, {
       validators: [
         VerseCheck('fromVerse', 'toVerse')
       ]
     });
 
-    this.registerForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
+    this.bibleForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
 
 
     this.adminService.getProfiles().subscribe(data => {
-      // this.nameData = data.map(f => f.split("~")[0]);
-      // this.filteredNames = this.registerForm.controls['name'].valueChanges
-      //   .pipe(
-      //     startWith(''),
-      //     map(value => this._filterName(value))
-      //   );
+      this.nameData = data;
+      this.filteredNames = this.bibleForm.controls['name'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filterName(value))
+        );
     });
 
-
-
-
-    this.filteredBooks = this.registerForm.controls['books'].valueChanges
+    this.filteredBooks = this.bibleForm.controls['books'].valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
@@ -112,50 +112,145 @@ export class BibleInfoComponent implements OnInit {
     }
   }
 
-  private _filterName(value: string): string[] {
+  private _filterName(value: string): NameModel[] {
     if (value != null) {
-      const filterValue = value.toLowerCase();
-      return this.nameData.filter(option => option.toLowerCase().includes(filterValue));
+      return this.nameData
+        .filter(option => option.name.toLowerCase().includes(value));
+
+    }
+  }
+
+  checkChapterWithBible(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const forbidden = this.totalChapters < control.value;
+      return forbidden ? { 'chapterBelong': { value: control.value } } : null;
+    };
+  }
+
+  checkVersesWithBible(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const forbidden = this.totalToVerse < control.value;
+      return forbidden ? { 'verseBelong': { value: control.value } } : null;
+    };
+  }
+
+  displayFn(project): string {
+    console.log("what is project "+project)
+    if(project==null || project.name==null){
+      return project;
+    }
+    if(project.name!=null) {
+      return project.name
     }
 
   }
+
+  selectedNameToCheck: any;
+
+  selectName(fname): void {
+    console.log("selection "+fname.name);
+    this.selectedNameToCheck = fname;
+    this.nameUniqueId = fname.uniqueId;
+  }
+
+  checkSelectedName(fnames) {
+    console.log("change "+fnames);
+    // if (!this.selectedNameToCheck || this.selectedNameToCheck !== this.bibleForm.controls['name'].value) {
+    //   //this.bibleForm.controls['name'].setValue(null);
+    //   this.bibleForm.get('name').setValue('');
+    //   this.selectedNameToCheck = '';
+    // }
+  }
+
+  selectedBookToCheck: any;
+  totalChapters: number
+  totalToVerse: number
+
+  selectBook(fname): void {    
+    this.selectedBookToCheck = fname;
+    this.totalChapters = this.bibleDataService.getBibleTotalChapter(fname);
+  }
+
+  toSetToVerse(): void {
+    this.totalToVerse = this.bibleDataService
+      .getBibleToVerse(this.bibleForm.get('books').value, this.bibleForm.controls.chapter.value)
+      console.log("checking.. "+this.totalToVerse)
+  }
+
+  checkSelectedBook() {
+    if (!this.selectedBookToCheck || this.selectedBookToCheck !== this.bibleForm.controls['books'].value) {
+      this.bibleForm.controls['books'].setValue(null);
+      this.bibleForm.get('books').setValue('');
+      this.selectedBookToCheck = '';
+    }
+  }
+
+  public errorHandling = (control: string, error: string) => {
+    if (control == "toVerseGreater") {
+      if (this.bibleForm.controls.toVerse.errors != null &&
+        this.bibleForm.controls.toVerse.errors.mustMatch) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (control == "chapterBelong") {
+      if (this.bibleForm.controls.chapter.errors != null &&
+        this.bibleForm.controls.chapter.errors.chapterBelong) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (control == "verseBelong") {
+      if ((this.bibleForm.controls.fromVerse.errors != null &&
+        this.bibleForm.controls.fromVerse.errors.verseBelong)
+        ||
+        (this.bibleForm.controls.toVerse.errors != null &&
+          this.bibleForm.controls.toVerse.errors.verseBelong)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return this.bibleForm.controls[control].hasError(error);
+  }
+
 
   addBibleDetails() {
 
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
+  get f() { return this.bibleForm.controls; }
 
 
   onSave() {
-    //this.anim.play();
-    if (this.crudFlag == "delete" || this.crudFlag == "clear") {
+    if (this.crudFlag == "delete") {
       console.log("delete or clear")
       this.submitted = false;
       this.crudFlag = "";
-      // this.anim.stop();
       return;
     }
 
     this.submitted = true;
-    if (this.registerForm.invalid) {
+    if (this.bibleForm.invalid) {
       console.log("form vali")
-      // this.anim.stop();
       return;
     }
-
+    this.spinnerService.show();
     if (this.saveUP == true) {
       return this.onUpdate();
     }
 
     var createDailyData = <DailyData>{
-      name: this.registerForm.get('name').value,
-      date: formatDate(this.registerForm.controls.date.value, 'yyyy-MM-dd', 'en'),
-      portion: this.registerForm.get('books').value,
-      chapter: this.registerForm.controls.chapter.value,
-      fromVerses: this.registerForm.controls.fromVerse.value,
-      toVerses: this.registerForm.controls.toVerse.value,
+      name: this.nameUniqueId,
+      pureName: this.bibleForm.get('name').value.name,
+      date: formatDate(this.bibleForm.controls.date.value, 'yyyy-MM-dd', 'en'),
+      portion: this.bibleForm.get('books').value,
+      chapter: this.bibleForm.controls.chapter.value,
+      fromVerses: this.bibleForm.controls.fromVerse.value,
+      toVerses: this.bibleForm.controls.toVerse.value,
       uniqueId: ""
     };
 
@@ -163,9 +258,8 @@ export class BibleInfoComponent implements OnInit {
       .subscribe(data => {
         createDailyData.uniqueId = data;
         this.child.saveRowValues(createDailyData);
-        // this.anim.stop();
-        console.log("successfully saved");
         this.onReset();
+        this.spinnerService.hide();
         this.successSnackBar("Details Saved Successfully!");
       });
 
@@ -173,19 +267,20 @@ export class BibleInfoComponent implements OnInit {
 
   onUpdate(): void {
     var createDailyData = <DailyData>{
-      name: this.registerForm.get('name').value,
-      date: formatDate(this.registerForm.controls.date.value, 'yyyy-MM-dd', 'en'),
-      portion: this.registerForm.get('books').value,
-      chapter: this.registerForm.controls.chapter.value,
-      fromVerses: this.registerForm.controls.fromVerse.value,
-      toVerses: this.registerForm.controls.toVerse.value,
+      name: this.nameUniqueId,
+      date: formatDate(this.bibleForm.controls.date.value, 'yyyy-MM-dd', 'en'),
+      portion: this.bibleForm.get('books').value,
+      chapter: this.bibleForm.controls.chapter.value,
+      fromVerses: this.bibleForm.controls.fromVerse.value,
+      toVerses: this.bibleForm.controls.toVerse.value,
+      pureName: this.bibleForm.get('name').value.name
     };
 
     this.adminService.putBibleInfo(createDailyData, this.uniqueId)
       .subscribe(data => {
-        this.child.UpdateRowValues(createDailyData, this.uniqueId)
-        // this.anim.stop();
+        this.child.UpdateRowValues(createDailyData, this.uniqueId);        
         this.onReset();
+        this.spinnerService.hide();
         this.successSnackBar("Details Uploaded Successfully!");
       })
   }
@@ -194,12 +289,15 @@ export class BibleInfoComponent implements OnInit {
     this.submitted = false;
     this.uniqueId = "";
     this.crudFlag = "clear";
-    this.registerForm.controls.chapter.setValue('');
-    this.registerForm.controls.fromVerse.setValue('');
-    this.registerForm.controls.toVerse.setValue('');
-    this.registerForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
-    this.registerForm.get('books').setValue('');
-    this.registerForm.get('name').setValue('');
+    // this.bibleForm.controls.chapter.setValue('');
+    // this.bibleForm.controls.fromVerse.setValue('');
+    // this.bibleForm.controls.toVerse.setValue('');
+    // this.bibleForm.get('books').setValue('');
+    // this.bibleForm.get('name').setValue('');
+    this.form.resetForm();
+    this.bibleForm.get('name').setValue('');
+    this.bibleForm.get('books').setValue('');
+    this.bibleForm.controls.date.setValue(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
     this.saveUP = false
 
   }
@@ -209,14 +307,14 @@ export class BibleInfoComponent implements OnInit {
 
   disable: any;
   onDeleteRows(): void {
-    //this.registerForm.disable()
     this.crudFlag = "delete";
-    console.log('deleted ' + this.uniqueId)
     if (this.uniqueId.length > 0) {
+      this.spinnerService.show();
       this.adminService.deleteBibleInfo(this.uniqueId)
         .subscribe(data => {
           this.child.deleteRowValues(this.uniqueId)
           this.onReset();
+          this.spinnerService.hide();
           this.successSnackBar("Details deleted Successfully!");
         })
     }
@@ -224,7 +322,7 @@ export class BibleInfoComponent implements OnInit {
 
   selectedAutoCompleteName(value): void {
     console.log('selected value ' + value)
-    this.registerForm.controls.name = value;
+    this.bibleForm.controls.name = value;
   }
 
 
@@ -271,12 +369,19 @@ export class BibleInfoComponent implements OnInit {
   }
 
   selectRowValue(dailyData: DailyData) {
-    this.registerForm.controls.chapter.setValue(dailyData.chapter);
-    this.registerForm.controls.fromVerse.setValue(dailyData.fromVerses);
-    this.registerForm.controls.toVerse.setValue(dailyData.toVerses);
-    this.registerForm.controls.date.setValue(formatDate(dailyData.date, 'yyyy-MM-dd', 'en'));
-    this.registerForm.get('books').setValue(dailyData.portion);
-    this.registerForm.get('name').setValue(dailyData.name);
+    this.bibleForm.controls.chapter.setValue(dailyData.chapter);
+    this.bibleForm.controls.fromVerse.setValue(dailyData.fromVerses);
+    this.bibleForm.controls.toVerse.setValue(dailyData.toVerses);
+    this.bibleForm.controls.date.setValue(formatDate(dailyData.date, 'yyyy-MM-dd', 'en'));
+    this.bibleForm.get('books').setValue(dailyData.portion);
+    console.log("purname -- "+dailyData.pureName)
+    console.log("name--- "+dailyData.name)
+    let nameModel: NameModel = {
+      name: dailyData.pureName,
+      uniqueId: dailyData.name
+    }
+    this.bibleForm.get('name').setValue(nameModel);
+    this.nameUniqueId = dailyData.name;
     this.saveUP = true;
     this.uniqueId = dailyData.uniqueId;
   }

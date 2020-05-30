@@ -21,7 +21,7 @@
     <div class="overflowBar">
         <div id="datatable_div" *ngFor="let element of ELEMENT_DATA" fxLayout="row" fxLayoutGap="2px" 
                 style="cursor: pointer;" (click)="selectRow(element)" class="check">
-            <div fxFlex=" 40"><span class="responsive-font-header" style="color: green">{{element.name}}</span>
+            <div fxFlex=" 40"><span class="responsive-font-header" style="color: green">{{element.pureName}}</span>
                 <span class="responsive-font-smaller">({{element.date}})</span>
             </div>
             <div fxFlex="20">{{element.portion}}</div>

@@ -2,96 +2,119 @@
     <div>
         <h5 class="card-header responsive-font-header">Add/Modify Bible Readers Details</h5>
         <div class="card-body">
-            <form [formGroup]="registerForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
+            <form #form="ngForm" [formGroup]="bibleForm" class="responsive-font" fxLayout="row wrap" fxLayout.xs="column"
                 fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayout.sm="column"
                 fxLayoutAlign.sm="start stretch" fxLayoutGap="4px grid" (ngSubmit)="onSave()">
-                <div fxFlex="40" fxShow="true" fxHide.lt-md="true">
-                    <input type="text" formControlName="name" class="form-control" [matAutocomplete]="autoname"
-                        placeholder="Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-
-                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                        <div *ngIf="f.name.errors.required">Name is required</div>
-                    </div>
-                    <mat-autocomplete #autoname="matAutocomplete">
-                        <mat-option *ngFor="let name of filteredNames | async" [value]="name">
-                            {{name}}
-                        </mat-option>
-                    </mat-autocomplete>
+                <div fxFlex="20" fxShow="true" fxHide.lt-md="true">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>NAME</mat-label>
+                        <input matInput formControlName="name"  [matAutocomplete]="autoname"
+                            forceSelection="true" placeholder="Enter the name" (change)="checkSelectedName(fnames)" />
+                        <mat-error *ngIf="errorHandling('name', 'required')">
+                            Name is required
+                        </mat-error>
+                        <mat-autocomplete #autoname="matAutocomplete" [displayWith]="displayFn"
+                            (optionSelected)="selectName($event.option.value)">
+                            <mat-option #fnames  *ngFor="let fname of filteredNames | async" [value]="fname">
+                                {{fname.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
                 </div>
                 <div fxFlex="40" fxHide="true" fxShow.lt-md="true">
                     <input type="button" formControlName="name" class="form-control" placeholder="Name"
                         (click)="openNameDialog()" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                 </div>
-                <div fxFlex="35" fxShow="true" fxHide.lt-md="true">
-                    <mat-form-field>
-                        <input formControlName="date" class="form-control" matInput [matDatepicker]="picker1"
-                            placeholder="Date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }">
+                <div fxFlex="20" fxShow="true" fxHide.lt-md="true">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input formControlName="date" matInput [matDatepicker]="picker1" placeholder="Enter the Date">
                         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
 
-                        <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
-                            <div *ngIf="f.date.errors.required">Date is required</div>
-                        </div>
+                        <mat-error *ngIf="errorHandling('date', 'required')">
+                            Date is required
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div fxFlex="25" fxHide="true" fxShow.lt-md="true">
                     <input type="button" formControlName="date" class="form-control" placeholder="Date" />
                 </div>
-                <div fxFlex="30">
-
-                    <input type="text" formControlName="books" class="form-control" [matAutocomplete]="autobooks"
-                        placeholder="Books" [ngClass]="{ 'is-invalid': submitted && f.books.errors }" />
-
-                    <div *ngIf="submitted && f.books.errors" class="invalid-feedback">
-                        <div *ngIf="f.books.errors.required">Book Name is required</div>
-                    </div>
-                    <mat-autocomplete #autobooks="matAutocomplete">
-                        <mat-option *ngFor="let book of filteredBooks | async" [value]="book">
-                            {{book}}
-                        </mat-option>
-                    </mat-autocomplete>
-
-                </div>
                 <div fxFlex="15">
-                    <input type="text" formControlName="chapter" class="form-control" placeholder="Chapter"
-                        [ngClass]="{ 'is-invalid': submitted && f.chapter.errors }" minlength="1" maxlength="3"
-                        (keypress)="numberValidator($event)" />
-
-                    <div *ngIf="submitted && f.chapter.errors" class="invalid-feedback">
-                        <div *ngIf="f.chapter.errors.required">Chapter is required</div>
-                    </div>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Books</mat-label>
+                        <input matInput formControlName="books" [matAutocomplete]="autobooks" placeholder="Books"
+                            (change)="checkSelectedBook()" />
+                        <mat-error *ngIf="errorHandling('books', 'required')">
+                            Book is required
+                        </mat-error>
+                        <mat-autocomplete #autobooks="matAutocomplete"
+                            (optionSelected)="selectBook($event.option.value)">
+                            <mat-option *ngFor="let fbook of filteredBooks | async" [value]="fbook">
+                                {{fbook}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
                 </div>
-                <div fxFlex="20">
-                    <input type="text" formControlName="fromVerse" class="form-control" placeholder="From Verse"
-                        [ngClass]="{ 'is-invalid': submitted && f.fromVerse.errors }" minlength="1" maxlength="3"
-                        (keypress)="numberValidator($event)" />
+                <div fxFlex="10">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Chapter</mat-label>
+                        <input matInput formControlName="chapter" placeholder="Chapter" minlength="1" maxlength="3"
+                            (keypress)="numberValidator($event)" (focusout)="toSetToVerse()" />
 
-                    <div *ngIf="submitted && f.fromVerse.errors" class="invalid-feedback">
-                        <div *ngIf="f.fromVerse.errors.required">FromVerse is required</div>
-                    </div>
+                        <mat-error *ngIf="errorHandling('chapter', 'required')">
+                            Chapter is required
+                        </mat-error>
+
+                        <mat-error *ngIf="errorHandling('chapterBelong', 'required')">
+                            Chapter is not belonged
+                        </mat-error>
+                    </mat-form-field>
                 </div>
-                <div fxFlex="20">
-                    <input type="text" formControlName="toVerse" class="form-control" placeholder="To Verse"
-                        [ngClass]="{ 'is-invalid': submitted && f.toVerse.errors }" minlength="1" maxlength="3"
-                        (keypress)="numberValidator($event)" />
+                <div fxFlex="10">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>From Verse</mat-label>
+                        <input matInput formControlName="fromVerse" placeholder="From Verse" minlength="1" maxlength="3"
+                            (keypress)="numberValidator($event)" />
 
-                    <div *ngIf="submitted && f.toVerse.errors" class="invalid-feedback">
-                        <div *ngIf="f.toVerse.errors.required">To Verse is required</div>
-                        <div *ngIf="f.toVerse.errors.mustMatch">From verse should not be greater than
+                        <mat-error *ngIf="errorHandling('fromVerse', 'required')">
+                            FromVerse is required
+                        </mat-error>
+                        <mat-error *ngIf="errorHandling('verseBelong', 'required')">
+                            From Verse is not belonged
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxFlex="10">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>To Verse</mat-label>
+                        <input matInput formControlName="toVerse" placeholder="To Verse" minlength="1" maxlength="3"
+                            (keypress)="numberValidator($event)" />
+
+                        <mat-error *ngIf="errorHandling('toVerse', 'required')">
+                            To Verse is required
+                        </mat-error>
+                        <mat-error *ngIf="errorHandling('toVerseGreater', 'required')">
+                            From verse should not be greater than
                             To Verse
-                        </div>
-                    </div>
+                        </mat-error>
+                        <mat-error *ngIf="errorHandling('verseBelong', 'required')">
+                            To Verse is not belonged
+                        </mat-error>
+
+                    </mat-form-field>
+
                 </div>
-                <div fxFlex="100" fxLayout="row" fxLayout.lt.sm="column" fxLayoutAlign="end center"
+                <div fxFlex="100" fxLayout="row" fxLayout.lt.sm="column" fxLayoutAlign="center center"
                     fxLayoutAlign.lt-md="center center" fxLayoutGap="4px">
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" id="btn_bibleinfo_save" fxHide={{saveUP}}
-                        class="btn btn-primary" type="submit">Save</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="33" id="btn_bibleinfo_save" fxHide={{!saveUP}}
-                        class="btn btn-primary" type="submit">Update</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-secondary"
-                        (click)="onReset()">Clear</button>
-                    <button fxFlex="20" fxFlex.sm="30" fxFlex.xs="30" class="btn btn-danger"
-                        (click)="onDeleteRows()">Delete</button>
+                    <button fxFlex="10" fxFlex.sm="15" fxFlex.xs="15" id="btn_bibleinfo_save" fxHide={{saveUP}}
+                        [disabled]="bibleForm.invalid" class="btn btn-primary" type="submit">Save</button>
+                    <button fxFlex="10" fxFlex.sm="15" fxFlex.xs="15" id="btn_bibleinfo_save" fxHide={{!saveUP}}
+                        [disabled]="bibleForm.invalid" class="btn btn-primary" type="submit">Update</button>
+                    <a fxFlex="10" fxFlex.sm="15" fxFlex.xs="15" class="btn btn-secondary"
+                        (click)="onReset()">Clear</a>
+                    <button fxFlex="10" fxFlex.sm="15" fxFlex.xs="15" class="btn btn-danger"
+                        [disabled]="bibleForm.invalid" (click)="onDeleteRows()">Delete</button>
                 </div>
             </form>
             <br>
